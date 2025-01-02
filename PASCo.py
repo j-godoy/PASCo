@@ -968,7 +968,7 @@ if __name__ == "__main__":
         reduceTrue=args.reduceTrue,
         reduceEqual=args.reduceEqual,
         trackAllVars=args.trackAllVars,
-        max_cores=args.max_cores
+        max_cores=int(args.max_cores)
     )
     
     pasco.run()
