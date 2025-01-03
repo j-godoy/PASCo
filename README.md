@@ -58,6 +58,62 @@ Here:
 
 It requires that the corresponding Solidity contract is in the /Contract folder and its config file in the /Config folder.
 
+## Example of Configuration File
+
+Each `.sol` file (located in the `Contracts` folder) must be accompanied by a corresponding `[contractNameFile]Config.py` file. This configuration file specifies various parameters for setting up the abstraction process:
+
+- **fileName**: The name of the Solidity file.
+- **contractName**: The name of the smart contract.
+- **functions**: A list of public functions defined in the contract.
+- **statePreconditions**: A list of preconditions related to state variables for public functions. Each index corresponds to the matching function in the `functions` list (e.g., the first element in this list applies to the first function in `functions`).
+- **functionPreconditions**: A list of preconditions related to parameters for public functions. Each index corresponds to the matching function in the `functions` list.
+- **functionVariables**: Variables used within the functions.
+- **tool_output**: A string pattern to identify the relevant output from VeriSol (or another underlying tool, if updated).
+- **statesModeState**: Useful for executing PASCo in `states` mode.
+- **statesNamesModeState**: A list of state names used in `states` mode. This provides meaningful names for abstract states.
+- **statePreconditionsModeState**: A list of preconditions for states in `states` mode. Each index corresponds to the matching state in `statesNamesModeState`.
+- **txBound**: The transaction bound (default is 8).
+- **time_out**: The timeout duration in seconds (default is 600 seconds).
+- **epaExtraConditions**: Additional conditions for the EPA mode.
+
+This configuration ensures the abstraction process is tailored to the specific requirements of each contract.
+
+### Example Configuration for `HelloBlockchainFixedConfig.py`
+
+Below is an example of a configuration file for the `HelloBlockchain_fixed.sol` contract:
+
+```python
+fileName = "HelloBlockchain_fixed.sol"
+contractName = "HelloBlockchain"
+functions = [
+    "SendRequest(requestMessage);",
+    "SendResponse(responseMessage);"
+]
+
+statePreconditions = [
+    "State == StateType.Respond", 
+    "State == StateType.Request"
+]
+functionPreconditions = [
+    "msg.sender == Requestor",
+    "true"
+]
+
+functionVariables = "uint requestMessage, uint responseMessage"
+tool_output = "Found a counterexample"
+
+statesModeState = [[1, 0], [0, 2]]
+statesNamesModeState = [
+    "Request",
+    "Respond"
+]
+statePreconditionsModeState = [
+    "State == StateType.Request", 
+    "State == StateType.Respond"
+]
+txBound = 8
+```
+
 ### Output structure
 
 - **k_n**: Indicates the `k_bound` parameter used to set up PASCo.
@@ -145,5 +201,4 @@ python pasco.py --file HelloBlockchainConfig --mode epa --mode states --txBound 
    - Make sure to include the required `--file` (that must to be in Config folder) and `--mode` arguments.
 
 2. **Slow Execution**  
-   - Try reducing the number of tracked variables with `--trackAllVars False`.
-   - Limit the number of CPU cores used with `--max_cores <value>`.
+   - Limit the number of CPU cores used with `--max_cores <value>` (default value is the number of system CPU cores).
