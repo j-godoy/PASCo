@@ -1,4 +1,4 @@
-fileName = "Reentrancy_simpleReentrancyFixed.sol"
+fileName = "Reentrancy_simpleReentrancyFixed_lock.sol"
 contractName = "Reentrance"
 functions = [
 "addToBalance();",

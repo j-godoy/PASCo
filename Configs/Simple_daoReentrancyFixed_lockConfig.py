@@ -1,21 +1,18 @@
-fileName = "Reentrancy_daoReentrancyFixed.sol"
-contractName = "ReentrancyDAO"
+fileName = "Simple_daoReentrancyFixed_lock.sol"
+contractName = "SimpleDAO"
 functions = [
-"deposit();",
-"withdrawAll_Init();",
-"withdrawAll_End();",
-# "t(_time);",
+"donate(to);",
+"withdraw_Init(amount);",
+"withdraw_End();",
 "dummy_balanceGTZero();",
 # "dummy_balanceIsZero();",
 "dummy_balanceAGTZero();"
 # "dummy_balanceAIsZero();"
 ]
-
 statePreconditions = [
 "true",
 "senders_in_mapping > 0",
 "senders_reentrant.length > 0",
-# "true",
 "balance > 0",
 # "balance == 0",
 "credit[A] > 0"
@@ -24,16 +21,15 @@ statePreconditions = [
 functionPreconditions = [
 "true",
 "true",
-"senders_reentrant[senders_reentrant.length-1] == msg.sender",
-# "_time > 0",
+"true",
 "true",
 # "true",
-# "true",
 "true"
+# "true"
 # "true",
 # "true"
 ]
-functionVariables = ""#"address A, uint _amount, address _to"
+functionVariables = "address to, uint amount, address A"
 # functionVariables = "uint n"
 tool_output = "Found a counterexample"
 
