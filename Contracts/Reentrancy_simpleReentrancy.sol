@@ -50,7 +50,8 @@
     }
 
     function withdrawBalance_End() public {
-        require(senders_in_mapping > 0);require (senders_reentrant.length > 0);
+        require(senders_in_mapping > 0);
+        require (senders_reentrant.length > 0);
         require (senders_reentrant[senders_reentrant.length-1] == msg.sender);
         senders_reentrant.length -= 1;
 

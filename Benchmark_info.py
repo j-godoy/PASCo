@@ -83,6 +83,13 @@ def config_B3_2():
     ["Reentrancy_daoReentrancyFixedConfig",["e"]],
     ["Reentrancy_simpleReentrancyFixedConfig",["e"]],    
     ["Simple_daoReentrancyFixedConfig",["e"]],
+    
+    ###Benchmark3-claim-split-fixed_lock
+    ["EtherstoreReentrancyFixed_lockConfig",["e"]],
+    ["ReentranceReentrancyFixed_lockConfig",["e"]],
+    ["Reentrancy_daoReentrancyFixed_lockConfig",["e"]],
+    ["Reentrancy_simpleReentrancyFixed_lockConfig",["e"]],    
+    ["Simple_daoReentrancyFixed_lockConfig",["e"]],
         
     ]
     return configs
@@ -238,8 +245,8 @@ def to_csv(table):
 
 if __name__ == "__main__":
     init = time.time()
-    main(config_B1(), REPETICIONES, 8, 8, 600)
-    main(config_B2(), REPETICIONES, 8, 8, 600)
+    # main(config_B1(), REPETICIONES, 8, 8, 600)
+    # main(config_B2(), REPETICIONES, 8, 8, 600)
     main(config_B3_1(), REPETICIONES, 8, 8, 600)
     main(config_B3_2(), REPETICIONES, 16, 16, 600)
     end = time.time()

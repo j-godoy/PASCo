@@ -54,7 +54,8 @@ contract Reentrance {
 
   function withdraw_End() public {
     require (senders_reentrant.length > 0);
-    require (true);
+    address last_sender = senders_reentrant[senders_reentrant.length-1].sender;
+    require(last_sender == msg.sender);
 		uint256 value = senders_reentrant[senders_reentrant.length-1].value;
     senders_reentrant.length--;
 
