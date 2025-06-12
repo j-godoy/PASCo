@@ -8,6 +8,7 @@
 
  contract Reentrance {
      mapping (address => uint) userBalance;
+     bool lock = false;
 
      function getBalance(address u) constant returns(uint){
          return userBalance[u];
@@ -18,12 +19,14 @@
      }
 
      function withdrawBalance(){
+        require (!lock);
+        lock = true;
          // send userBalance[msg.sender] ethers to msg.sender
          // if mgs.sender is a contract, it will call its fallback function
-         uint user_balance = userBalance[msg.sender];
-         userBalance[msg.sender] = 0;
-         if( ! (msg.sender.call.value(user_balance)() ) ){
+         if( ! (msg.sender.call.value(userBalance[msg.sender])() ) ){
              throw;
          }
+         userBalance[msg.sender] = 0;
+         lock = false;
      }
  }

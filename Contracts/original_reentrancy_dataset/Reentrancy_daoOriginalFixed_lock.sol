@@ -9,15 +9,19 @@ pragma solidity ^0.4.19;
 contract ReentrancyDAO {
     mapping (address => uint) credit;
     uint balance;
+    bool lock = false;
 
     function withdrawAll() public {
+        require (!lock);
+        lock = true;
         uint oCredit = credit[msg.sender];
         if (oCredit > 0) {
             balance -= oCredit;
-            credit[msg.sender] = 0;
             bool callResult = msg.sender.call.value(oCredit)();
             require (callResult);
+            credit[msg.sender] = 0;
         }
+        lock = false;
     }
 
     function deposit() public payable {

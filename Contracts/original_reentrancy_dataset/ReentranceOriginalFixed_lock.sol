@@ -9,6 +9,7 @@ pragma solidity ^0.4.18;
 contract Reentrance {
 
   mapping(address => uint) public balances;
+  bool lock = false;
 
   function donate(address _to) public payable {
     balances[_to] += msg.value;
@@ -19,12 +20,15 @@ contract Reentrance {
   }
 
   function withdraw(uint _amount) public {
-    balances[msg.sender] -= _amount;
+    require (!lock);
+    lock = true;
     if(balances[msg.sender] >= _amount) {
       if(msg.sender.call.value(_amount)()) {
         _amount;
       }
+      balances[msg.sender] -= _amount;
     }
+    lock = false;
   }
 
   function() public payable {}
