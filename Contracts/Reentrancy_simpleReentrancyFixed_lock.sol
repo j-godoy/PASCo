@@ -42,19 +42,17 @@
         lock = true;
         // send userBalance[msg.sender] ethers to msg.sender
         // if mgs.sender is a contract, it will call its fallback function
-        // <yes> <report> REENTRANCY
-        // if( ! (msg.sender.call.value(userBalance[msg.sender])() ) ){
-        //     throw;
-        // }
         if (userBalance[msg.sender] > 0) {
-            balance -= userBalance[msg.sender];
             senders_reentrant.push(msg.sender);
-            // senders_in_mapping -= 1;
+            balance -= userBalance[msg.sender];
+            // <yes> <report> REENTRANCY
+            // if( ! (msg.sender.call.value(userBalance[msg.sender])() ) ){
+            //     throw;
+            // }
         }
     }
 
     function withdrawBalance_End() public {
-        require(senders_in_mapping > 0);
         require (senders_reentrant.length > 0);
         require (senders_reentrant[senders_reentrant.length-1] == msg.sender);
         senders_reentrant.length -= 1;

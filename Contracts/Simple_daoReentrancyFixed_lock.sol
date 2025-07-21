@@ -41,9 +41,9 @@ contract SimpleDAO {
     require (!lock);
     lock = true;
     if (credit[msg.sender]>= amount) {
+      balance -= amount;//added
       // <yes> <report> REENTRANCY
       // bool res = msg.sender.call.value(amount)();
-      balance -= amount;//added
       senders_reentrant.push(ReentrantSender(msg.sender, amount));
     }
   }

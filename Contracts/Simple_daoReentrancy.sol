@@ -38,10 +38,10 @@ contract SimpleDAO {
   function withdraw_Init(uint amount) public  {
     require(senders_in_mapping > 0);
     if (credit[msg.sender]>= amount) {
+      senders_reentrant.push(ReentrantSender(msg.sender, amount));
+      balance -= amount;//added
       // <yes> <report> REENTRANCY
       // bool res = msg.sender.call.value(amount)();
-      balance -= amount;//added
-      senders_reentrant.push(ReentrantSender(msg.sender, amount));
     }
   }
 

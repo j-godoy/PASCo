@@ -43,12 +43,12 @@ contract Reentrance {
   function withdraw_Init(uint _amount) public {
     require(senders_in_mapping > 0);
     if(balances[msg.sender] >= _amount) {
+      balance -= _amount;
+      senders_reentrant.push(ReentrantSender(msg.sender, _amount));
       // <yes> <report> REENTRANCY
       // if(msg.sender.call.value(_amount)()) {
       //   _amount;
       // }
-      balance -= _amount;
-      senders_reentrant.push(ReentrantSender(msg.sender, _amount));
     }
   }
 

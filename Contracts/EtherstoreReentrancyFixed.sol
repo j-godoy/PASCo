@@ -50,15 +50,15 @@ contract EtherStore {
         require(_weiToWithdraw <= withdrawalLimit);
         // limit the time allowed to withdraw
         require(time >= lastWithdrawTime[msg.sender] + 1 weeks);
-        // <yes> <report> REENTRANCY
-        //require(msg.sender.call.value(_weiToWithdraw)());
-        balance -= _weiToWithdraw;
         balances[msg.sender] -= _weiToWithdraw;
-        lastWithdrawTime[msg.sender] = time;
-        senders_reentrant.push(ReentrantSender(msg.sender, _weiToWithdraw));
-         if (_weiToWithdraw > 0 && balances[msg.sender] == 0) {
+        balance -= _weiToWithdraw;
+        if (_weiToWithdraw > 0 && balances[msg.sender] == 0) {
             senders_in_mapping -= 1;
         }
+        lastWithdrawTime[msg.sender] = time;
+        senders_reentrant.push(ReentrantSender(msg.sender, _weiToWithdraw));
+        // <yes> <report> REENTRANCY
+        //require(msg.sender.call.value(_weiToWithdraw)());
     }
 
     function withdrawFunds_End () public {

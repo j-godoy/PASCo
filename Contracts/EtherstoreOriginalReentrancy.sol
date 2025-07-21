@@ -42,9 +42,10 @@ contract EtherStore {
         require(_weiToWithdraw <= withdrawalLimit);
         // limit the time allowed to withdraw
         require(time >= lastWithdrawTime[msg.sender] + 1 weeks);
+        
+        balance -= _weiToWithdraw;
         // <yes> <report> REENTRANCY
         //require(msg.sender.call.value(_weiToWithdraw)());
-        balance -= _weiToWithdraw;
 
         balances[msg.sender] -= _weiToWithdraw;        
         lastWithdrawTime[msg.sender] = time;

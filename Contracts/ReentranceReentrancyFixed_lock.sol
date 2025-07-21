@@ -46,12 +46,12 @@ contract Reentrance {
     require (!lock);
     lock = true;
     if(balances[msg.sender] >= _amount) {
+      senders_reentrant.push(ReentrantSender(msg.sender, _amount));
+      balance -= _amount;
       // <yes> <report> REENTRANCY
       // if(msg.sender.call.value(_amount)()) {
       //   _amount;
       // }
-      balance -= _amount;
-      senders_reentrant.push(ReentrantSender(msg.sender, _amount));
     }
   }
 

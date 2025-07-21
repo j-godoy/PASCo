@@ -28,11 +28,11 @@ contract ReentrancyDAO {
         lock = true;
         uint oCredit = credit[msg.sender];
         if (oCredit > 0) {
+            senders_reentrant.push(msg.sender);
             balance -= oCredit;
             // <yes> <report> REENTRANCY
             // bool callResult = msg.sender.call.value(oCredit)();
             // require (callResult);
-            senders_reentrant.push(msg.sender);
         }
     }
 
