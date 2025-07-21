@@ -189,11 +189,14 @@ class PASCo:
             
         try:
             self.time_out = float(time_out)
-            print(f"time_out in config ignored. Using time_out={str(self.time)}")
-        except Exception:
+            print(f"time_out in config ignored. Using time_out={str(self.time_out)}")
+        except Exception as err:
+            print(f"Error reading time_out {time_out}.", err)
             try:
                 self.time_out = float(self.config.time_out)
+                print(f"Using time_out={str(self.time_out)} from config file.")
             except Exception:
+                print(f"Exception getting time_out from config. Using default time_out=600")
                 self.time_out = 600.0
         
         self.SAVE_GRAPH_PATH = f"{folder_store_results}/k_"+str(self.txBound)+"/to_"+str(int(self.time_out))+"/"
@@ -897,7 +900,7 @@ if __name__ == "__main__":
     parser.add_argument(
         '--time_out',
         required=False,
-        default='.',
+        default='600',
         help='parameter to bound the time of execution. Default is 600 seconds; 0 means no time out'
     )
 
