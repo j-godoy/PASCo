@@ -11,7 +11,6 @@ contract CrowdfundingR {
     bool funded = false;
     uint balance = 0;
     // uint _cont = 0;
-    address _last;
     uint countBackers = 0;
     address[] donadores_reentrada = new address[](0);
 

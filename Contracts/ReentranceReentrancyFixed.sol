@@ -15,7 +15,6 @@ contract Reentrance {
 	address A;
 
   // Re-entrancy analysis
-	address _last;
   struct ReentrantSender {
       address sender;
       uint value;

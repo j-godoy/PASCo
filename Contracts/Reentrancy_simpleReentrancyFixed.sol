@@ -14,7 +14,6 @@
 	address A;
 
     // Re-entrancy analysis
-	address _last;
 	address[] senders_reentrant = new address[](0);
 
     constructor(address _A) public {
