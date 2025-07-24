@@ -16,7 +16,7 @@ def process_csv(file_path, n_cores, summary_data):
     # Calcular N para las demás filas
     n_other_queries = math.ceil(len(other_queries) / n_cores)
 
-    simulaciones = 100
+    simulaciones = 1000
     promedios_query_reduce = []
     promedios_other_queries = []
     for i in range(simulaciones):
@@ -71,7 +71,8 @@ def process_directory(path, n_cores):
 
 def main():
     if len(sys.argv) != 3:
-        print("Uso: python script.py <path> <n_cores>")
+        print("example: python script.py <path> <n_cores>")
+        print("example: python script.py <graph> <16>")
         sys.exit(1)
 
     path = sys.argv[1]
