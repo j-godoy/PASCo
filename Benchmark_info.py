@@ -29,7 +29,8 @@ def run(command, modeName, table):
     file_output  = os.path.join(f"{result_folder_name}",f"k_{TXBOUND_END}", f"to_{TIME_OUT}",file_output)
     if not os.path.exists(os.path.dirname(file_output)):
         os.makedirs(os.path.dirname(file_output))
-    full_command = f"{command} --txBound {str(TXBOUND_END)} --time_out {str(TIME_OUT)}  > {file_output}"
+    max_cores = 8
+    full_command = f"{command} --max_cores {max_cores} --txBound {str(TXBOUND_END)} --time_out {TIME_OUT}  > {file_output}"
     
     print("Modo: " + modeName)
     results = []
@@ -245,8 +246,8 @@ def to_csv(table):
 
 if __name__ == "__main__":
     init = time.time()
-    # main(config_B1(), REPETICIONES, 8, 8, 600)
-    # main(config_B2(), REPETICIONES, 8, 8, 600)
+    main(config_B1(), REPETICIONES, 8, 8, 600)
+    main(config_B2(), REPETICIONES, 8, 8, 600)
     main(config_B3_1(), REPETICIONES, 8, 8, 600)
     main(config_B3_2(), REPETICIONES, 16, 16, 600)
     end = time.time()
