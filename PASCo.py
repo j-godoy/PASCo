@@ -132,7 +132,12 @@ def try_command(tool, temp_function_name, tempFunctionName, final_directory, sta
     if FAIL_TO:
         return ADD_TX_IF_TIMEOUT,"?", (QUERY_TYPE, FAIL_TO, False, total_query_time) # Si tiró timeout, retorno False.
     
-    output_verisol = str(result[0].decode('utf-8'))
+    #output_verisol = str(result[0].decode('utf-8')) # This works in Windows
+    if isinstance(result, subprocess.CompletedProcess):
+        output_verisol = result.stdout.decode("utf-8") # This works on Unix
+    else:
+        output_verisol = result[0].decode("utf-8") # This works in Windows
+
     output_successful = "Formal Verification successful"
 
     
