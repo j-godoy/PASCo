@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y \
     libsqlite3-dev \
     libbz2-dev \
     ca-certificates \
+    graphviz \
     && rm -rf /var/lib/apt/lists/*
 
 # 2. Compile Python 3.11 from Source
