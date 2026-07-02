@@ -42,7 +42,6 @@ contract Auction {
                 highestBid = msg.value;
             }
         }
-        t();
     }
 
     function Withdraw() public {
@@ -55,7 +54,6 @@ contract Auction {
         else {
             revert();
         }
-        t();
     }
 
     function AuctionEnd() public {
@@ -69,7 +67,6 @@ contract Auction {
             ended = true;
             //beneficiary.transfer(highestBid);
         }
-        t();
     }
 
     function t() internal {
