@@ -13,25 +13,25 @@ functions = [
 
 statePreconditions = [
 "true",
-"senders_in_mapping > 0",
-"senders_reentrant.length > 0",
-"senders_reentrant.length == 0",
-"balance > 0",
-# "balance == 0",
-"balances[A] > 0"
+"(senders_in_mapping > 0 && !lock)",
+"(senders_reentrant.length > 0)",
+"(senders_reentrant.length == 0)",
+"(balance > 0)",
+# "(balance == 0)",
+"(balances[A] > 0)"
 # "balances[A] == 0"
 ]
 functionPreconditions = [
 "true",
 "true",
 "true",
-"_time > 0",
+"(_time > 0)",
 "true",
 # "true",
 # "true",
 "true"
 ]
-functionVariables = "uint _weiToWithdraw, address A, uint _time"
+functionVariables = "uint _weiToWithdraw, uint _time"
 # functionVariables = "uint n"
 tool_output = "Found a counterexample"
 

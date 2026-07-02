@@ -10,12 +10,12 @@ functions = [
 # "dummy_balanceAIsZero();"
 ]
 statePreconditions = [
-"true",
-"senders_in_mapping > 0",
-"senders_reentrant.length > 0",
-"balance > 0",
+"(true)",
+"(senders_in_mapping > 0 && !lock)",
+"(senders_reentrant.length > 0)",
+"(balance > 0)",
 # "balance == 0",
-"credit[A] > 0"
+"(credit[A] > 0)"
 # "credit[A] == 0"
 ]
 functionPreconditions = [
@@ -29,7 +29,7 @@ functionPreconditions = [
 # "true",
 # "true"
 ]
-functionVariables = "address to, uint amount, address A"
+functionVariables = "address to, uint amount"
 # functionVariables = "uint n"
 tool_output = "Found a counterexample"
 

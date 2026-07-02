@@ -11,17 +11,17 @@ functions = [
 ]
 statePreconditions = [
 "true",
-"senders_in_mapping > 0",
-"senders_reentrant.length > 0",
-"balance > 0",
+"(senders_in_mapping > 0 && !lock)",
+"(senders_reentrant.length > 0)",
+"(balance > 0)",
 # "balance == 0",
-"userBalance[A] > 0"
+"(userBalance[A] > 0)"
 # "userBalance[A] == 0"
 ]
 functionPreconditions = [
 "true",
 "true",
-"senders_reentrant[senders_reentrant.length-1] == msg.sender",
+"(senders_reentrant[senders_reentrant.length-1] == msg.sender)",
 "true",
 # "true",
 # "true",
@@ -29,7 +29,7 @@ functionPreconditions = [
 # "true",
 # "true"
 ]
-functionVariables = "address A"
+functionVariables = ""#"address A, bool lock"
 # functionVariables = "uint n"
 tool_output = "Found a counterexample"
 

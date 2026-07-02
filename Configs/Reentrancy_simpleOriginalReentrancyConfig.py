@@ -10,10 +10,10 @@ functions = [
 ]
 statePreconditions = [
 "true",
-"senders_in_mapping > 0",
-"balance > 0",
+"(senders_in_mapping > 0)",
+"(balance > 0)",
 # "balance == 0",
-"userBalance[A] > 0"
+"(userBalance[A] > 0)"
 # "userBalance[A] == 0"
 ]
 functionPreconditions = [
