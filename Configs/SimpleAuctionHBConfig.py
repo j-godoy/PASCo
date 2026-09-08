@@ -5,21 +5,21 @@ functions = [
 "withdrawA();",
 "withdrawOther();",
 "auctionEnd();",
-# "t();"
+"t();"
 ]
 statePreconditions = [
 "time <= (auctionStart + biddingTime)",
 "pendingReturnsCount > 0 && _hasA",
 "pendingReturnsCount > 0 && (!_hasA || pendingReturnsCount > 1)",
 "!ended && time >= (auctionStart + biddingTime)",
-# "true"
+"true"
 ]
 functionPreconditions = [
 "msg.value > highestBid",
 "true",
 "msg.sender == _A",
 "msg.sender != _A"
-# "true"
+"true"
 ]
 functionVariables = "address highestBidderA"
 tool_output = "Found a counterexample"

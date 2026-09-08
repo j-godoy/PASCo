@@ -24,7 +24,8 @@ contract SimpleAuction {
 
     // Current state of the auction.
     address public highestBidder = address(0x0);
-    address public highestBidderA;
+    address public _A;
+    bool public _hasA;
     uint public highestBid;
     uint time;
 
@@ -58,13 +59,13 @@ contract SimpleAuction {
         uint _time,
         uint _biddingTime,
         uint _auctionStart,
-        address _highestBidderA
+        address A
     ) public {
         time = _time;
         beneficiary = _beneficiary;
         auctionStart = _auctionStart;
         biddingTime = _biddingTime;
-        highestBidderA = _highestBidderA;
+        _A = A;
     }
 
     /// Bid on the auction with the value sent
@@ -94,17 +95,20 @@ contract SimpleAuction {
             // to let the recipients withdraw their money themselves.
             if (pendingReturns[highestBidder] == 0) {
                 pendingReturnsCount += 1;
+                if (highestBidder == _A) {
+                    _hasA = true;
+                }
             }
             pendingReturns[highestBidder] += highestBid;
         }
         highestBidder = msg.sender;
         highestBid = msg.value;
         // emit HighestBidIncreased(msg.sender, msg.value);
+        t();
     }
 
     /// Withdraw a bid that was overbid.
     function withdraw() public returns (bool) {
-        //time = time + 1;
         require(pendingReturnsCount > 0);
         uint amount = pendingReturns[msg.sender];
         if (amount > 0) {
@@ -113,6 +117,7 @@ contract SimpleAuction {
             // before `send` returns.
             pendingReturns[msg.sender] = 0;
             pendingReturnsCount = pendingReturnsCount - 1;
+            // pendingReturnsArray = remove(msg.sender, pendingReturnsArray);
 
             // if (!msg.sender.send(amount)) {
             //     // No need to call throw here, just reset the amount owing
@@ -122,8 +127,54 @@ contract SimpleAuction {
         }
         return true;
     }
+
+    // /// Withdraw a bid that was overbid.
+    // function withdrawA() public returns (bool) {
+    //     //time = time + 1;
+    //     require(pendingReturnsCount > 0);
+    //     require(_hasA);
+    //     require(msg.sender == _A);
+    //     uint amount = pendingReturns[msg.sender];
+    //     if (amount > 0) {
+    //         // It is important to set this to zero because the recipient
+    //         // can call this function again as part of the receiving call
+    //         // before `send` returns.
+    //         pendingReturns[msg.sender] = 0;
+    //         pendingReturnsCount = pendingReturnsCount - 1;
+    //         _hasA = false;
+
+    //         // if (!msg.sender.send(amount)) {
+    //         //     // No need to call throw here, just reset the amount owing
+    //         //     pendingReturns[msg.sender] = amount;
+    //         //     return false;
+    //         // }
+    //     }
+    //     return true;
+    // }
+
+    // /// Withdraw a bid that was overbid.
+    // function withdrawOther() public returns (bool) {
+    //     //time = time + 1;
+    //     require(pendingReturnsCount > 0 && (!_hasA || pendingReturnsCount > 1));
+    //     require(msg.sender != _A);
+    //     uint amount = pendingReturns[msg.sender];
+    //     if (amount > 0) {
+    //         // It is important to set this to zero because the recipient
+    //         // can call this function again as part of the receiving call
+    //         // before `send` returns.
+    //         pendingReturns[msg.sender] = 0;
+    //         pendingReturnsCount = pendingReturnsCount - 1;
+
+    //         // if (!msg.sender.send(amount)) {
+    //         //     // No need to call throw here, just reset the amount owing
+    //         //     pendingReturns[msg.sender] = amount;
+    //         //     return false;
+    //         // }
+    //     }
+    //     return true;
+    // }
     // Users want to know when the auction ends, seconds from 1970-01-01
-    function auctionEndTime() public view returns (uint256) {
+    function auctionEndTime() internal view returns (uint256) {
         return auctionStart + biddingTime;
     }
 
@@ -157,7 +208,11 @@ contract SimpleAuction {
         require(ended);
     }
 
-    function t() internal {
+    function dummy_isHB() public view {
+        require(highestBidder == _A);
+    }
+
+    function t() public {
         time = time + 1;
     }
 }

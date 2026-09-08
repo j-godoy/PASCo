@@ -4,19 +4,19 @@ functions = [
 "Bid();",
 "Withdraw();",
 "AuctionEnd();",
-# "t();",
+"t();",
 ]
 statePreconditions = [
 "(!ended && (auctionStart + biddingTime) >= blockNumber)",
 "pendingReturnsCount > 0",
 "(ended && blockNumber > (auctionStart + biddingTime))",
-# "true",
+"true",
 ]
 functionPreconditions = [
 "msg.value > highestBid",
 "pendingReturns[msg.sender] != 0",
 "true",
-# "true",
+"true",
 ]
 functionVariables = ""
 tool_output = "Found a counterexample"
