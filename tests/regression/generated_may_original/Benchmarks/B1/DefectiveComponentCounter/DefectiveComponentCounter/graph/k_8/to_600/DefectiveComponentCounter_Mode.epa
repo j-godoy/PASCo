@@ -1,0 +1,7 @@
+// Contracts/DefectiveComponentCounter.sol
+digraph {
+	init [label=init]
+	"1-" [label="ComputeTotal();
+"]
+	init -> "1-" [label=constructor]
+}

@@ -6,7 +6,8 @@ functions = [
 "enableRefunds();",
 "beneficiaryWithdraw();",
 "withdraw(payee);",
-"transferPrimary(recipient);"
+"transferPrimary(recipient);",
+"t();",
 ]
 statePreconditions = [
 "_state == State.Active",
@@ -14,7 +15,8 @@ statePreconditions = [
 "_state == State.Active",
 "_state == State.Closed && address(this).balance > 0",
 "depositsCount > 0 && _state == State.Refunding",
-"true"
+"true",
+"true",
 ]
 functionPreconditions = [
 "true",
@@ -22,7 +24,8 @@ functionPreconditions = [
 "true",
 "true",
 "true",
-"recipient != address(0)"
+"recipient != address(0)",
+"true",
 ]
 functionVariables = "address refundee, address payable payee, address recipient"
 tool_output = "Found a counterexample"

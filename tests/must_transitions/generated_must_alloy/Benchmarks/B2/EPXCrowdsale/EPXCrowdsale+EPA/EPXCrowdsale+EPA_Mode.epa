@@ -1,0 +1,23 @@
+digraph {
+S00 [label="Init"]
+S23 [label="!constructor  & !setupCrowdsale\n & !buy & checkGoalReached\n & refund & t\n"]
+S25 [label="!constructor  & !setupCrowdsale\n & buy & checkGoalReached\n & !refund & t\n"]
+S44 [label="!constructor  & !setupCrowdsale\n & !buy & checkGoalReached\n & !refund & t\n"]
+S49 [label="!constructor  & setupCrowdsale\n & !buy & !checkGoalReached\n & !refund & t\n"]
+
+S23->S23 [label="checkGoalReached\nt", style="", color="blue"]
+S23->S23 [label="refund", style="", color="turquoise"]
+S44->S23 [label="checkGoalReached", style="", color="turquoise"]
+S00->S49 [label="constructor", style="", color="blue"]
+S49->S44 [label="setupCrowdsale", style="", color="blue"]
+S25->S25 [label="checkGoalReached", style="", color="blue"]
+S25->S25 [label="τ", style="dashed", color="turquoise"]
+S25->S44 [label="τ", style="dashed", color="turquoise"]
+S23->S44 [label="refund", style="", color="turquoise"]
+S25->S44 [label="buy", style="", color="black"]
+S25->S25 [label="buy", style="", color="black"]
+S44->S44 [label="checkGoalReached\nt", style="", color="turquoise"]
+S49->S25 [label="setupCrowdsale", style="", color="blue"]
+S44->S25 [label="τ", style="dashed", color="turquoise"]
+S49->S49 [label="τ", style="dashed", color="blue"]
+}

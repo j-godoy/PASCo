@@ -1,0 +1,17 @@
+// Contracts/HelloBlockchain_fixed.sol
+digraph {
+	"1-0-" [label="SendRequest(requestMessage);
+"]
+	"0-2-" [label="SendResponse(responseMessage);
+"]
+	"0-2-" [label="SendResponse(responseMessage);
+"]
+	"1-0-" [label="SendRequest(requestMessage);
+"]
+	init [label=init]
+	"1-0-" [label="SendRequest(requestMessage);
+"]
+	"1-0-" -> "0-2-" [label="SendRequest(requestMessage);"]
+	"0-2-" -> "1-0-" [label="SendResponse(responseMessage);"]
+	init -> "1-0-" [label=constructor]
+}

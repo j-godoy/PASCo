@@ -1,10 +1,8 @@
 /**
  *Submitted for verification at Etherscan.io on 2019-10-02
-*/
-
+ */
 
 pragma solidity ^0.5.0;
-
 
 contract Ownable {
     address public owner;
@@ -30,7 +28,6 @@ contract Ownable {
 
 contract DepositLockerInterface {
     function slash(address _depositorToBeSlashed) public;
-
 }
 
 contract DepositLocker is DepositLockerInterface, Ownable {
@@ -110,12 +107,9 @@ contract DepositLocker is DepositLockerInterface, Ownable {
         owner = address(0x0);
     }
 
-    function registerDepositor(address _depositor)
-        public
-        isInitialised
-        isNotDeposited
-        onlyDepositorsProxy
-    {
+    function registerDepositor(
+        address _depositor
+    ) public isInitialised isNotDeposited onlyDepositorsProxy {
         require(
             canWithdraw[_depositor] == 0,
             "can only register Depositor once"
@@ -126,13 +120,9 @@ contract DepositLocker is DepositLockerInterface, Ownable {
         // emit DepositorRegistered(_depositor, numberOfDepositors);
     }
 
-    function deposit(uint _valuePerDepositor)
-        public
-        payable
-        isInitialised
-        isNotDeposited
-        onlyDepositorsProxy
-    {
+    function deposit(
+        uint _valuePerDepositor
+    ) public payable isInitialised isNotDeposited onlyDepositorsProxy {
         require(numberOfDepositors > 0, "no depositors");
         require(_valuePerDepositor > 0, "_valuePerDepositor must be positive");
 
@@ -165,16 +155,17 @@ contract DepositLocker is DepositLockerInterface, Ownable {
         //emit Withdraw(msg.sender, valuePerDepositor);
     }
 
-    function slash(address _depositorToBeSlashed)
-        public
-        isInitialised
-        isDeposited
-    {
+    function slash(
+        address _depositorToBeSlashed
+    ) public isInitialised isDeposited {
         require(
             msg.sender == slasher,
             "Only the slasher can call this function."
         );
-        require(canWithdraw[_depositorToBeSlashed] == 1, "cannot slash address");
+        require(
+            canWithdraw[_depositorToBeSlashed] == 1,
+            "cannot slash address"
+        );
         canWithdraw[_depositorToBeSlashed] = 0;
         time = time + 1;
         //address(0x0).transfer(valuePerDepositor);
@@ -231,7 +222,7 @@ contract ValidatorAuction is Ownable {
     enum AuctionState {
         Deployed,
         Started,
-        DepositPending, /* all slots sold, someone needs to call depositBids */
+        DepositPending /* all slots sold, someone needs to call depositBids */,
         Ended,
         Failed
     }
@@ -301,9 +292,14 @@ contract ValidatorAuction is Ownable {
         auctionState = AuctionState.Deployed;
         time = _time;
         //Deposit Locker init
-        depositLocker.init(dloker_releaseTimestamp, dloker_slasher, dloker_depositorsProxy, dloker_time);
+        depositLocker.init(
+            dloker_releaseTimestamp,
+            dloker_slasher,
+            dloker_depositorsProxy,
+            dloker_time
+        );
 
-        t();
+        // t();
     }
 
     // function() external payable stateIs(AuctionState.Started) {
@@ -316,8 +312,8 @@ contract ValidatorAuction is Ownable {
             time <= startTime + auctionDurationInDays,
             "Auction has already ended."
         );
-        // uint slotPrice = 1; 
-        uint slotPrice = currentPrice();// 
+        // uint slotPrice = 1;
+        uint slotPrice = currentPrice(); //
         require(
             msg.value >= slotPrice,
             "Not enough ether was provided for bidding."
@@ -344,8 +340,8 @@ contract ValidatorAuction is Ownable {
         if (biddersTotal == maximalNumberOfParticipants) {
             transitionToDepositPending();
         }
-        
-        t();
+
+        // t();
     }
 
     function startAuction() public onlyOwner stateIs(AuctionState.Deployed) {
@@ -356,7 +352,7 @@ contract ValidatorAuction is Ownable {
 
         auctionState = AuctionState.Started;
         startTime = time;
-        t();
+        // t();
         //emit AuctionStarted(now);
     }
 
@@ -365,7 +361,7 @@ contract ValidatorAuction is Ownable {
         depositLocker.deposit.value(lowestSlotPrice * biddersTotal)(
             lowestSlotPrice
         );
-        t();
+        // t();
         //emit AuctionEnded(closeTime, lowestSlotPrice, biddersTotal);
     }
 
@@ -381,14 +377,12 @@ contract ValidatorAuction is Ownable {
         } else {
             transitionToAuctionFailed();
         }
-        t();
+        // t();
     }
 
-    function addToWhitelist(address[] memory addressesToWhitelist)
-        public
-        onlyOwner
-        stateIs(AuctionState.Deployed)
-    {
+    function addToWhitelist(
+        address[] memory addressesToWhitelist
+    ) public onlyOwner stateIs(AuctionState.Deployed) {
         for (uint32 i = 0; i < addressesToWhitelist.length; i++) {
             if (whitelist[addressesToWhitelist[i]] == false) {
                 countWhitelist += 1;
@@ -397,7 +391,7 @@ contract ValidatorAuction is Ownable {
             //emit AddressWhitelisted(addressesToWhitelist[i]);
         }
         //whitelist[A] = true;
-        t();
+        // t();
     }
 
     function withdraw() public {
@@ -415,9 +409,8 @@ contract ValidatorAuction is Ownable {
         } else {
             // require(false); // Should be unreachable
         }
-         t();
+        // t();
     }
-
 
     function currentPrice()
         internal
@@ -430,11 +423,9 @@ contract ValidatorAuction is Ownable {
         return priceAtElapsedTime(secondsSinceStart);
     }
 
-    function priceAtElapsedTime(uint secondsSinceStart)
-        internal
-        view
-        returns (uint)
-    {
+    function priceAtElapsedTime(
+        uint secondsSinceStart
+    ) internal view returns (uint) {
         // To prevent overflows
         require(
             secondsSinceStart < 100 * 365,
@@ -443,13 +434,14 @@ contract ValidatorAuction is Ownable {
         uint msSinceStart = 1000 * secondsSinceStart;
         uint relativeAuctionTime = msSinceStart / 1;
         uint256 decayDivisor = 1;
-        uint decay = relativeAuctionTime * relativeAuctionTime * relativeAuctionTime / decayDivisor;
-        uint256 price = startPrice *
-            (1 + relativeAuctionTime) / 1;
+        uint decay = (relativeAuctionTime *
+            relativeAuctionTime *
+            relativeAuctionTime) / decayDivisor;
+        uint256 price = (startPrice * (1 + relativeAuctionTime)) / 1;
         return price;
     }
 
-     function withdrawAfterAuctionEnded() internal stateIs(AuctionState.Ended) {
+    function withdrawAfterAuctionEnded() internal stateIs(AuctionState.Ended) {
         require(
             bids[msg.sender] > lowestSlotPrice,
             "The sender has nothing to withdraw."
@@ -460,7 +452,7 @@ contract ValidatorAuction is Ownable {
 
         bids[msg.sender] = lowestSlotPrice;
         if (lowestSlotPrice == 0) {
-           countBidders -= 1;
+            countBidders -= 1;
         }
 
         // msg.sender.transfer(valueToWithdraw);
@@ -509,5 +501,4 @@ contract ValidatorAuction is Ownable {
     function t() public {
         time = time + 1;
     }
-
 }

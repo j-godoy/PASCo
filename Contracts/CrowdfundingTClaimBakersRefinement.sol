@@ -69,9 +69,13 @@ contract CrowdfundingR {
         balance = balance - val;
     }
 
-    function dummy_balanceAGTZero () public {} // balanceAGTZeroAndNotB
-    function dummy_balanceBGTZero () public {} // balanceBGTZeroAndNotA
+    function dummy_balanceAGTZeroAndNotB () public {} // balanceAGTZeroAndNotB
 
+    function dummy_balanceAGTZeroAndBGTZero () public {} // balanceAGTZeroAndBGTZero
+
+    function dummy_balanceBGTZeroAndNotA () public {} // balanceBGTZeroAndNotA
+
+    function dummy_balanceAAndBZero () public {} // balanceAAndBZero
 
     function t() public {
         blockNumber = blockNumber + 1;

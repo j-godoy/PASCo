@@ -1,0 +1,5 @@
+Subject: DigitalLockerFixed-Mode.epa
+Total time: 119.85829973220825
+# Time Out: 0
+# Corral Fail without trackvars: 0
+# Corral Fail with trackvars: 0

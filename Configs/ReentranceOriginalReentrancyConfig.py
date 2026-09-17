@@ -12,16 +12,16 @@ functions = [
 
 statePreconditions = [
 "true",
-"(senders_in_mapping > 0)",
+"senders_in_mapping > 0",
 # "true",
-"(balance > 0)",
+"balance > 0",
 # "balance == 0",
-"(balances[A] > 0)",
+"balances[A] > 0",
 # "balances[A] == 0"
 ]
 functionPreconditions = [
 "true",
-"(balances[msg.sender] >= _amount)",
+"balances[msg.sender] >= _amount",
 # "_time > 0",
 # "true",
 # "true",

@@ -1,0 +1,15 @@
+// Contracts/BasicProvenance_fixed.sol
+digraph {
+	"1-0-0-" [label=Created]
+	"0-2-0-" [label=InTransit]
+	"0-2-0-" [label=InTransit]
+	"0-2-0-" [label=InTransit]
+	"0-2-0-" [label=InTransit]
+	"0-0-3-" [label=Completed]
+	init [label=init]
+	"1-0-0-" [label=Created]
+	init -> "1-0-0-" [label=constructor color=blue]
+	"0-2-0-" -> "0-0-3-" [label="Complete();" color=blue style=solid]
+	"0-2-0-" -> "0-2-0-" [label="TransferResponsibility(newCounterparty);" color=blue style=solid]
+	"1-0-0-" -> "0-2-0-" [label="TransferResponsibility(newCounterparty);" color=blue style=solid]
+}

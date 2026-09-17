@@ -1,0 +1,15 @@
+// Contracts/RoomThermostat.sol
+digraph {
+	"1-0-" [label=Created]
+	"0-2-" [label=InUse]
+	"0-2-" [label=InUse]
+	"0-2-" [label=InUse]
+	"0-2-" [label=InUse]
+	"0-2-" [label=InUse]
+	init [label=init]
+	"1-0-" [label=Created]
+	init -> "1-0-" [label=constructor color=blue]
+	"0-2-" -> "0-2-" [label="SetTargetTemperature(targetTemperature);" color=blue style=solid]
+	"1-0-" -> "0-2-" [label="StartThermostat();" color=blue style=solid]
+	"0-2-" -> "0-2-" [label="SetMode(mode);" color=blue style=solid]
+}

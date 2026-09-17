@@ -48,6 +48,7 @@ contract Auction {
                 highestBid = msg.value;
             }
         }
+        // t();
     }
 
     function Withdraw() public {
@@ -59,18 +60,20 @@ contract Auction {
         } else {
             revert();
         }
+        // t();
     }
 
     function AuctionEnd() public {
         uint end = auctionStart + biddingTime;
 
         //!ended is a bug
-        if (blockNumber <= end || !ended) {
+        if (blockNumber <= end || ended) {
             revert();
         } else {
             ended = true;
             //beneficiary.transfer(highestBid);
         }
+        // t();
     }
 
     function t() public {

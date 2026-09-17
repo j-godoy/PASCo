@@ -1,168 +1,45 @@
 import itertools
-import subprocess
 import os
 import shutil
-import numpy  as np
+import numpy as np
 import graphviz
-from threading import Thread
 import time
-from enum import Enum
 import sys
-import platform
-import psutil
-import remove_unknown_tx
 from concurrent.futures import ProcessPoolExecutor, as_completed
-from multiprocessing import Manager, Process
 import traceback
 import argparse
+import pickle
+from collections import defaultdict
 
+from helpers.exceptions import Mode
+from helpers.tool_runner import (
+    output_combination,
+    get_params_from_function_name,
+    try_command_task,
+)
+from helpers.solidity_parser import _extract_state_variables_from_solidity
+from helpers.preconditions import sanitize_function_preconditions
+from helpers.counterexamples import (
+    _normalize_counterexample_specs,
+    _build_check_state_call,
+    _inject_check_state,
+    _has_function_definition,
+    _insert_body_into_contract,
+)
+from helpers.query_tasks import (
+    _require_line,
+    _safe_query_label,
+    analyze_single_edge_task,
+    check_hypermust_for_group,
+)
 
-
-class Mode(Enum):
-    epa = "epa"
-    states = "states"
-
-
+# Inicializacion de variables que contabilizan los timeouts y errores.-
 number_to = 0
 number_corral_fail = 0
 number_corral_fail_with_tackvars = 0
 
-def getToolCommand(includeNumber, toolCommand, combinations, txBound, trackAllVars, contractName):
-        command = toolCommand + " " 
-        command = command + "/txBound:" + str(txBound) + " "
-        command = command + "/noPrf "
-        if trackAllVars:
-            command = command + "/trackAllVars"+ " "
-        for indexCombination, combi in enumerate(combinations):
-            if combi != includeNumber: 
-                command += "/ignoreMethod:vc"+ combi +"@" + contractName + " "
-        return command
-
-def get_params_from_function_name(temp_function_name):
-        array = temp_function_name.split('x')
-        return int(array[0]), int(array[1]), int(array[2])
-
-def output_combination(indexCombination, tempCombinations, mode, functions, statesNames):
-        combination = tempCombinations[indexCombination]
-        output = ""
-        for function in combination:
-            if function != 0:
-                if mode == Mode.epa:
-                    output += functions[function-1] +"\n"
-                else:
-                    output += statesNames[function-1]
-
-        if output == "":
-            output = "Vacio\n"
-        return output
-
-def try_command_task(function_name, tempFunctionNames, tool, final_directory, statesTemp,
-                        txBound, time_out, trackAllVars, mode, functions,
-                        statesNames, states, verbose, QUERY_TYPE, contractName,
-                        tool_output, TRACK_VARS):
-    """
-    Ejecuta `try_command` para una tarea específica y actualiza las variables compartidas.
-    """
-    feasible, to_or_fail, query_values = try_command(tool, function_name, tempFunctionNames, final_directory, statesTemp,
-                        txBound, time_out, trackAllVars, mode, functions,
-                        statesNames, states, verbose, QUERY_TYPE, contractName,
-                        tool_output, TRACK_VARS)
-    if to_or_fail == TRACK_VARS: #Lo vuelvo a ejecutar, pero con el parámetro trackAllVars=True
-        feasible, to_or_fail, query_values = try_command(tool, function_name, tempFunctionNames, final_directory, statesTemp,
-                        txBound, time_out, True, mode, functions,
-                        statesNames, states, verbose, QUERY_TYPE, contractName,
-                        tool_output, TRACK_VARS)
-    return feasible, to_or_fail, query_values
-
-
-def try_command(tool, temp_function_name, tempFunctionName, final_directory, statesTemp,
-                txBound, time_out, trackAllVars, mode, functions,
-                statesNames, states, verbose, QUERY_TYPE, contractName,
-                tool_output, TRACK_VARS):
-    ADD_TX_IF_TIMEOUT = False
-    ADD_TX_IF_FAIL = False
-    
-    #Evito chequear funciones "dummy"
-    if len(statesTemp) > 0:
-        indexPreconditionRequire, indexPreconditionAssert, indexFunction = get_params_from_function_name(temp_function_name)
-        i_state = output_combination(indexPreconditionRequire, statesTemp, mode, functions, statesNames)
-        f_state = output_combination(indexPreconditionAssert, states, mode, functions, statesNames)
-        if functions[indexFunction].startswith("dummy_"):
-            if i_state != f_state:
-                return False,"",()
-            else:
-                return True,"",()
-    
-    command = getToolCommand(temp_function_name, tool, tempFunctionName, txBound, trackAllVars, contractName)
-    if verbose:
-        print(f"Running command {command}")
-    
-    result = ""
-    FAIL_TO = False
-    try:
-        init = time.time()
-        if platform.system() == "Windows":
-            proc = subprocess.Popen(command.split(" "), stdout=subprocess.PIPE, cwd=final_directory)
-            result = proc.communicate(timeout=time_out)
-            # result = subprocess.check_output(command.split(" "), shell = False, cwd=final_directory, timeout=10.0)#Javi
-        else:
-            #TODO: run with timeout in unix
-            result = subprocess.run([command, ""], shell = True, cwd=final_directory, stdout=subprocess.PIPE)
-        end = time.time()
-    except Exception as e:
-        end = time.time()
-        FAIL_TO = True
-        if verbose:
-            print(f"---EXCEPTION por time out de {time_out} segs al ejecutar '{command}' desde folder '{final_directory}'")
-        indexPreconditionRequire, indexPreconditionAssert, indexFunction = get_params_from_function_name(temp_function_name)
-        i_state = output_combination(indexPreconditionRequire, statesTemp, mode, functions, statesNames)
-        f_state = output_combination(indexPreconditionAssert, states, mode, functions, statesNames)
-        if verbose:
-            print(f"TimeOut ([indexPre,indexAssert,indxFn][{indexPreconditionRequire},{indexPreconditionAssert},{indexFunction}]) desde state \n{i_state}\n al state \n{f_state}\n con la función '{functions[indexFunction]}'")
-        process = psutil.Process(proc.pid)
-        for proc in process.children(recursive=True):
-            proc.kill()
-        process.kill()
-        process.wait(2) # wait for killing subprocess
-        
-    
-    
-    total_query_time = end - init
-
-    if FAIL_TO:
-        return ADD_TX_IF_TIMEOUT,"?", (QUERY_TYPE, FAIL_TO, False, total_query_time) # Si tiró timeout, retorno False.
-    
-    #output_verisol = str(result[0].decode('utf-8')) # This works in Windows
-    if isinstance(result, subprocess.CompletedProcess):
-        output_verisol = result.stdout.decode("utf-8") # This works on Unix
-    else:
-        output_verisol = result[0].decode("utf-8") # This works in Windows
-
-    output_successful = "Formal Verification successful"
-
-    
-    # if verbose:
-    #   print(output_verisol)
-
-    if not tool_output in output_verisol and not output_successful in output_verisol:
-        print(f"Fail running VeriSol:\n{output_verisol}")
-    
-    #Corral can "fail"
-    output_error = "Corral may have aborted abnormally"
-    if output_error in output_verisol:
-        if not trackAllVars:
-            return False,TRACK_VARS, (QUERY_TYPE, FAIL_TO, "fail_corral_no_trackAllVars", total_query_time)
-        else:
-            return ADD_TX_IF_FAIL,"fail?", (QUERY_TYPE, FAIL_TO, "fail_corral_with_trackAllVars", total_query_time) # if corral fails with trackvars, we don't know if it's a real counterexample or not
-        
-    feasible = tool_output in output_verisol
-    return feasible, "", (QUERY_TYPE, FAIL_TO, feasible, total_query_time)
-
-
-
-
 class PASCo:
-    def __init__(self, configFile, mode, txBound, time_out, folder_store_results, verbose, reduceStates, reduceTrue, reduceEqual, trackAllVars, max_cores):
+    def __init__(self, configFile, mode, txBound, time_out, folder_store_results, verbose, reduceStates, reduceTrue, reduceEqual, trackAllVars, max_cores, must, savepdf=True, dot=None):
         self.configFile = configFile
         self.modes = mode
         self.txBound = txBound
@@ -173,6 +50,9 @@ class PASCo:
         self.reduceEqual = reduceEqual
         self.trackAllVars = trackAllVars
         self.max_cores = max_cores
+        self.must = must
+        self.savepdf = savepdf
+        self.dotResumePath = dot
         self.TRACK_VARS = "trackAllVars"
         self.tool_output = "Found a counterexample"
         self.statesNames = []
@@ -182,7 +62,37 @@ class PASCo:
         self.functions = self.config.functions
         self.contractName = self.config.contractName
         self.functionVariables = self.config.functionVariables
-        self.functionPreconditions = self.config.functionPreconditions
+        self.originalFunctionPreconditions = self.config.functionPreconditions
+        self.functionPreconditions = sanitize_function_preconditions(self.originalFunctionPreconditions, self.functions)
+        manual_specs = _normalize_counterexample_specs(getattr(self.config, "counterexampleVariables", []))
+        auto_detect  = getattr(self.config, "counterexampleVariablesAuto", True)
+        if manual_specs:
+            # El config define explícitamente las variables a usar: respetamos eso.
+            self.counterexampleSpecs = manual_specs
+        elif auto_detect:
+            # No hay lista manual (o está vacía): parseamos el .sol y usamos
+            # directamente las variables de estado del contrato (incluyendo
+            # las heredadas de sus contratos padre).
+            try:
+                with open(self.fileName, "r") as f:
+                    _sol_source = f.read()
+                self.counterexampleSpecs = _extract_state_variables_from_solidity(
+                    _sol_source, self.contractName
+                )
+                if self.counterexampleSpecs:
+                    detected_names = ", ".join(s["state_var"] for s in self.counterexampleSpecs)
+                    print(f"[counterexampleVariables] Auto-detectadas desde {self.config.fileName}: {detected_names}")
+            except Exception as e:
+                print(f"[counterexampleVariables] No se pudieron auto-detectar variables de estado: {e}")
+                self.counterexampleSpecs = []
+        else:
+            self.counterexampleSpecs = []
+        try:
+            self.mustLoopBound = int(
+                getattr(self.config, "mustLoopBound", getattr(self.config, "mustN", 5))
+            )
+        except Exception:
+            self.mustLoopBound = 5
         try:
             self.txBound = int(txBound)
             print(f"txBound in config ignored. Using txBound={str(self.txBound)}")
@@ -204,10 +114,12 @@ class PASCo:
                 print(f"Exception getting time_out from config. Using default time_out=600")
                 self.time_out = 600.0
         
-        self.SAVE_GRAPH_PATH = f"{folder_store_results}/k_"+str(self.txBound)+"/to_"+str(int(self.time_out))+"/"
+        run_timestamp = time.strftime("%Y%m%d_%H%M%S")
+        run_id = f"{self.contractName}_k{self.txBound}_to{int(self.time_out)}_{run_timestamp}"
+        self.SAVE_GRAPH_PATH = os.path.join(folder_store_results, run_id) + os.sep
+        os.makedirs(self.SAVE_GRAPH_PATH, exist_ok=True)
         self.NO_UNKNOWN_TX = "_no_unknown_tx"
 
-        # print the configuration
         print(f"Configuration: {self.configFile}")
         print(f"Modes: {self.modes}")
         print(f"File Name: {self.fileName}")
@@ -223,7 +135,77 @@ class PASCo:
         print(f"Max Cores: {self.max_cores}")
         print(f"Function Variables: {self.functionVariables}")
         print(f"Functions: {self.functions}")
+        print(f"Function Preconditions for queries: {self.functionPreconditions}")
+        print(f"Counterexample Variables: {self.counterexampleSpecs}")
+        print(f"Must loop bound: {self.mustLoopBound}")
+        print(f"May graph resume file (--dot): {self.dotResumePath}")
         
+
+    # -------------------------------------------------------------------------
+    # Persistencia del grafo May, para poder reutilizarlo como punto de
+    # partida de un análisis must (--dot) sin recalcularlo desde cero.
+    # -------------------------------------------------------------------------
+
+    def _maygraph_resume_path(self, mode):
+        tempFileName = self.configFile.replace('Config', '') + "_" + str(mode.value if hasattr(mode, "value") else mode)
+        return os.path.join(self.SAVE_GRAPH_PATH, tempFileName + "_maygraph.dot")
+
+    def save_maygraph_data(self, mode, preconditions, states, extraConditions):
+        """
+        Serializa el grafo May ya calculado (nodos, edges con sus índices, y
+        las listas de preconditions/states/extraConditions sobre las que se
+        construyó) para poder usarlo después como punto de partida de un
+        análisis must vía `--dot`, evitando recalcular toda la parte May
+        (la más lenta).
+        """
+        payload = {
+            "contractName": self.contractName,
+            "fileName": self.fileName,
+            "mode": mode.value if hasattr(mode, "value") else str(mode),
+            "dict_nodes_edges": self.dict_nodes_edges,
+            "preconditions": list(preconditions),
+            "states": list(states),
+            "extraConditions": list(extraConditions),
+            "statesNames": self.statesNames,
+        }
+        path = self._maygraph_resume_path(mode)
+        try:
+            with open(path, "wb") as f:
+                pickle.dump(payload, f)
+            print(f"[may graph] Punto de partida para --dot guardado en: {path}")
+        except Exception as e:
+            print(f"[may graph] No se pudo guardar el archivo de resume ({path}): {e}")
+        return path
+
+    def load_maygraph_data(self, path):
+        """
+        Carga un grafo May previamente guardado con `save_maygraph_data`.
+        Devuelve (preconditions, states, extraConditions, mode_str).
+        """
+        with open(path, "rb") as f:
+            payload = pickle.load(f)
+
+        if payload.get("contractName") != self.contractName:
+            print(
+                f"[--dot] Advertencia: '{path}' fue generado para el contrato "
+                f"'{payload.get('contractName')}', pero la config actual usa "
+                f"'{self.contractName}'. Los resultados pueden ser inconsistentes."
+            )
+
+        self.dict_nodes_edges = payload["dict_nodes_edges"]
+        self.statesNames = payload.get("statesNames", self.statesNames)
+        return (
+            payload["preconditions"],
+            payload["states"],
+            payload["extraConditions"],
+            payload.get("mode"),
+        )
+
+    def _render_or_save(self, dot, output_path):
+        if self.savepdf:
+            dot.render(output_path)
+        else:
+            dot.save(output_path + '.gv')
 
     def run(self):
         for current_mode in self.modes:
@@ -236,6 +218,7 @@ class PASCo:
         
             end = time.time()
 
+            # Constancia de tiempos:
             total_time = "Total time: {}".format(str(end-init))
             total_to = "# Time Out: {}".format(str(number_to))
             total_cfail1 = "# Corral Fail without trackvars: {}".format(str(number_corral_fail))
@@ -259,14 +242,34 @@ class PASCo:
                 for type, timeout, feasible, time_secs in self.query_list:
                     file.write(f"{str(type)},{str(timeout)},{str(feasible)},{str(time_secs)}\n")
 
+            # ---------------------------------------------------------------
+            # Resumen May | Must | Total de esta corrida (config + mode).
+            # Se guarda un CSV propio de la corrida (queda junto al resto de
+            # los resultados en self.SAVE_GRAPH_PATH) y además se imprime una
+            # línea "TIMING_SUMMARY|..." fácil de parsear por un script batch
+            # que orqueste múltiples corridas y arme la tabla final.
+            # ---------------------------------------------------------------
+            total_time_secs = end - init
+            tempFileName = self.configFile.replace('Config','')+"-"+str(current_mode)+"_timing.csv"
+            with open(os.path.join(self.SAVE_GRAPH_PATH,tempFileName), 'w') as file:
+                file.write("Config,Mode,May(s),Must(s),Total(s)\n")
+                file.write(f"{self.configFile},{current_mode},{self.time_may:.4f},{self.time_must:.4f},{total_time_secs:.4f}\n")
+
+            print(f"TIMING_SUMMARY|{self.configFile}|{current_mode}|{self.time_may:.4f}|{self.time_must:.4f}|{total_time_secs:.4f}")
+
     
     def run_mode(self, mode):
         print()
         print(f"STARTING RUN IN MODE: {mode}")
-        self.query_list = [] # (Type,TO?,feasible,time(sec)) for each query to verisol
+        self.query_list = []
         self.dict_nodes_edges = {}
         self.dict_nodes_edges['nodes'] = []
         self.dict_nodes_edges['edges'] = []
+
+        # Tiempos parciales de esta corrida (se exponen luego via self.time_may /
+        # self.time_must para que run() arme el resumen May | Must | Total).
+        self.time_may = 0.0
+        self.time_must = 0.0
 
         if mode == Mode.states:
             self.statesNames = self.config.statesNamesModeState
@@ -275,110 +278,145 @@ class PASCo:
         if mode == Mode.epa:
             self.statePreconditions = self.config.statePreconditions
 
+        must_enabled = str(args.must).lower() == 'true'
+        dot_resume_path = self.dotResumePath
 
-        count = len(self.functions)
-        #lista de numeros de 1 a N, donde N es la cantidad de funciones
-        funcionesNumeros = list(range(1, count + 1))
-        
-        
-        extraConditions = []
-        countPreInitial = 0
-        countPreFinal = 0
+        resumed_from_dot = False
+        if dot_resume_path:
+            if not must_enabled:
+                print("[--dot] Se ignora porque --must no está habilitado (--dot solo sirve como punto de partida para must).")
+            else:
+                try:
+                    preconditions, states, extraConditions, saved_mode = self.load_maygraph_data(dot_resume_path)
+                    if saved_mode and saved_mode != mode.value:
+                        print(
+                            f"[--dot] Advertencia: '{dot_resume_path}' fue guardado para el modo "
+                            f"'{saved_mode}', pero se está corriendo en modo '{mode.value}'."
+                        )
+                    resumed_from_dot = True
+                    print(f"[--dot] Grafo May cargado desde '{dot_resume_path}'. Se omite el cálculo de May.")
+                except Exception as e:
+                    print(f"[--dot] No se pudo cargar '{dot_resume_path}': {e}. Se calculará el grafo May normalmente.")
+                    traceback.print_exc()
+                    resumed_from_dot = False
 
-        if mode == Mode.epa :
-            #states tiene todos los posibles estados de acuerdo a las funciones habilitadas/no habilitadas
-            states = self.getCombinations(funcionesNumeros)
-            #preconditions tiene las precondiciones de cada estado, donde el indice i de preconditions es el estado i de states
-            preconditions = self.getPreconditions(funcionesNumeros, states)
-            try:
-                extraConditions = [self.config.epaExtraConditions for i in range(len(states))]
-            except:
-                extraConditions = ["true" for i in range(len(states))]
-        else :
-            preconditions = self.statePreconditionsModeState
-            states = self.statesModeState
-            try:
-                extraConditions = self.config.statesExtraConditions
-            except:
-                extraConditions = ["true" for i in range(len(states))]
-            
-        tempDir = self.create_directory_base("temp")
+        t_may_start = time.time()
+        if not resumed_from_dot:
+            count = len(self.functions)
+            funcionesNumeros = list(range(1, count + 1))
 
-        countPreInitial = len(preconditions)
+            extraConditions = []
+            countPreInitial = 0
+            countPreFinal = 0
 
-        # Quiero que haya 1 metodo tipo query por archivo
-        # si hay muchas queries en un archivo, por más que se use ignoreMethod, puede llegar a tardar mucho
-        # para no cambiar tanto la implementación, vamos a tener un archivo por cada query
-        cant_preconditions = len(preconditions)
-        preconditionsThreads = preconditions
-        preconditionsThreads = np.array_split(preconditionsThreads, cant_preconditions)
-        statesThreads = states
-        statesThreads = np.array_split(statesThreads, cant_preconditions)
-        extraConditionsThreads = extraConditions
-        if len(extraConditionsThreads) != 0:
-            extraConditionsThreads = np.array_split(extraConditions, cant_preconditions)
+            if mode == Mode.epa :
+                states = self.getCombinations(funcionesNumeros)
+                preconditions = self.getPreconditions(funcionesNumeros, states)
+                try:
+                    extraConditions = [self.config.epaExtraConditions for i in range(len(states))]
+                except:
+                    extraConditions = ["true" for i in range(len(states))]
+            else :
+                preconditions = self.statePreconditionsModeState
+                states = self.statesModeState
+                try:
+                    extraConditions = self.config.statesExtraConditions
+                except:
+                    extraConditions = ["true" for i in range(len(states))]
 
-        print(f"Number potential states: {len(preconditions)}")        
-        
-        if mode == Mode.epa and self.reduceStates:
-            print("Reducing combinations...")
-            # Otra alternativa
-            self.reduceCombinations(cant_preconditions, preconditionsThreads, statesThreads, 
-                                extraConditionsThreads, mode, states)
-        print("Reducing combinations Ended.")
+            tempDir = self.create_directory_base("temp")
 
-        preconditionsThreads = [x for x in preconditionsThreads if len(x)]
-        statesThreads = [x for x in statesThreads if len(x)]
-        extraConditionsThreads = [x for x in extraConditionsThreads if len(x)]
+            countPreInitial = len(preconditions)
 
-        preconditionsThreads = np.concatenate(preconditionsThreads)
-        statesThreads = np.concatenate(statesThreads)
-        if len(extraConditionsThreads) != 0:
-            extraConditionsThreads = np.concatenate(extraConditionsThreads)
-        states = statesThreads
-        preconditions = preconditionsThreads
-        extraConditions = extraConditionsThreads
+            cant_preconditions = len(preconditions)
+            preconditionsThreads = preconditions
+            preconditionsThreads = np.array_split(preconditionsThreads, cant_preconditions)
+            statesThreads = states
+            statesThreads = np.array_split(statesThreads, cant_preconditions)
+            extraConditionsThreads = extraConditions
+            if len(extraConditionsThreads) != 0:
+                extraConditionsThreads = np.array_split(extraConditions, cant_preconditions)
 
-        countPreFinal = len(preconditions)
-        temp_dir = os.path.join(tempDir, self.configFile + "-" + str(mode) + ".txt")
-        f = open(temp_dir, "w")
-        f.write(str(countPreInitial) + "\n" + str(countPreFinal) + "\n" + str(len(self.functions)))
-        f.close()
+            print(f"Number potential states: {len(preconditions)}")        
 
-        print(f"Number reachable states: {len(preconditionsThreads)}")        
+            if mode == Mode.epa and self.reduceStates:
+                print("Reducing combinations...")
+                self.reduceCombinations(cant_preconditions, preconditionsThreads, statesThreads, 
+                                    extraConditionsThreads, mode, states)
+            print("Reducing combinations Ended.")
 
-        cant_valid_states = len(preconditionsThreads)
-        preconditionsThreads = np.array_split(preconditionsThreads, cant_valid_states)
-        statesThreads = np.array_split(statesThreads, cant_valid_states)
-        extraConditionsThreads = np.array_split(extraConditionsThreads, cant_valid_states)
+            preconditionsThreads = [x for x in preconditionsThreads if len(x)]
+            statesThreads = [x for x in statesThreads if len(x)]
+            extraConditionsThreads = [x for x in extraConditionsThreads if len(x)]
 
-        self.validCombinations(cant_valid_states, preconditionsThreads, statesThreads, extraConditionsThreads, mode, extraConditions, preconditions, states)
-        print("Ended ValidCombinations\n")
+            preconditionsThreads = np.concatenate(preconditionsThreads)
+            statesThreads = np.concatenate(statesThreads)
+            if len(extraConditionsThreads) != 0:
+                extraConditionsThreads = np.concatenate(extraConditionsThreads)
+            states = statesThreads
+            preconditions = preconditionsThreads
+            extraConditions = extraConditionsThreads
 
-        
-        self.try_init(states, mode, extraConditions, preconditions)
-        print("Ended try_init\n")
+            countPreFinal = len(preconditions)
+            temp_dir = os.path.join(tempDir, self.configFile + "-" + str(mode) + ".txt")
+            f = open(temp_dir, "w")
+            f.write(str(countPreInitial) + "\n" + str(countPreFinal) + "\n" + str(len(self.functions)))
+            f.close()
 
-        dot = graphviz.Digraph(comment=self.fileName)
-        for n in self.dict_nodes_edges['nodes']:
-            dot.node(n[0], n[1])
-        for e in self.dict_nodes_edges['edges']:
-            dot.edge(e[0], e[1], label=str(e[2]))
-                    
-                    
-        print("PROCESS ENDED\n")
-        
+            print(f"Number reachable states: {len(preconditionsThreads)}")        
+
+            cant_valid_states = len(preconditionsThreads)
+            preconditionsThreads = np.array_split(preconditionsThreads, cant_valid_states)
+            statesThreads = np.array_split(statesThreads, cant_valid_states)
+            extraConditionsThreads = np.array_split(extraConditionsThreads, cant_valid_states)
+
+            self.validCombinations(cant_valid_states, preconditionsThreads, statesThreads, extraConditionsThreads, mode, extraConditions, preconditions, states)
+            print("Ended ValidCombinations\n")
+
+            self.try_init(states, mode, extraConditions, preconditions)
+            print("Ended try_init\n")
+
+            # Guardamos el grafo May ya calculado (nodos + edges con sus
+            # índices, y las listas de preconditions/states/extraConditions
+            # sobre las que se construyó) para poder reutilizarlo más
+            # adelante como punto de partida de un análisis must (--dot),
+            # sin tener que volver a correr toda esta parte (la más lenta).
+            self.save_maygraph_data(mode, preconditions, states, extraConditions)
+
+        # Tiempo de la parte May: exploración de estados/preconditions,
+        # reducción de combinaciones y try_init. Si se resumió desde --dot,
+        # este bloque no se ejecuta y el tiempo queda ~0 (no se recalculó May).
+        self.time_may = time.time() - t_may_start
+
         tempFileName = self.configFile.replace('Config','')
         tempFileName = tempFileName + "_" + str(mode)
         output_dot = self.SAVE_GRAPH_PATH + tempFileName
-        dot.render(output_dot)
-        # TODO: this is useful if timeout transitions would be considered and would keep a version of the graph clean
-        # output_with_no_unknown_tx = SAVE_GRAPH_PATH + tempFileName + NO_UNKNOWN_TX
-        # ret,removed_tx = remove_unknown_tx.remove_transitions(os.path.join(os.getcwd(), output_dot))
-        # ret = "// Total removed tx for timeouts : " + str(removed_tx) + "\n" + ret
-        # write_file = open(output_with_no_unknown_tx,'w')
-        # write_file.write(ret)
-        # write_file.close()
+
+        if must_enabled:
+            t_must_start = time.time()
+
+            # Conservamos una copia del grafo May "puro" (antes de
+            # clasificar must/may/HyperMust) para poder emitir, además del
+            # grafo must, el grafo may correspondiente.
+            may_nodes_snapshot = list(self.dict_nodes_edges['nodes'])
+            may_edges_snapshot = list(self.dict_nodes_edges['edges'])
+
+            self.analyze_must_transitions(preconditions, states, extraConditions, mode)
+
+            dot_may = self.create_graph_from(may_nodes_snapshot, may_edges_snapshot)
+            dot_must = self.create_must_graph()
+
+            self._render_or_save(dot_may, output_dot + "_may")
+            self._render_or_save(dot_must, output_dot + "_must")
+
+            # Tiempo de la parte Must: análisis de transiciones must +
+            # construcción/render de ambos grafos (may snapshot y must).
+            self.time_must = time.time() - t_must_start
+        else:
+            dot_may = self.create_graph()
+            self._render_or_save(dot_may, output_dot)
+
+        print("PROCESS ENDED\n")
 
     def getCombinations(self, funcionesNumeros):
         indices_con_truePreconditions = []
@@ -387,9 +425,8 @@ class PASCo:
         cantidad_funciones = len(funcionesNumeros)
         for index, statePrecondition in enumerate(self.statePreconditions):
             if statePrecondition == "true":
-                indices_con_truePreconditions.append(index + 1)#se suma 1 porque funcionesNumeros empieza en 1
+                indices_con_truePreconditions.append(index + 1)
 
-        # Combinations
         for L in range(len(funcionesNumeros) + 1):
             for subset in itertools.combinations(funcionesNumeros, L):
                 if self.reduceTrue:
@@ -427,7 +464,7 @@ class PASCo:
                 if isCorrect:
                     statesTemp2.append(combination)
         else:
-            statesTemp2 = statesTemp       
+            statesTemp2 = statesTemp
         return statesTemp2
 
     def getPreconditions(self, funcionesNumeros, states):
@@ -453,11 +490,10 @@ class PASCo:
     def functionOutput(self, number):
         return "function vc" + number + "(" + self.functionVariables + ") payable public {"
 
-
     def get_extra_condition_output(self, condition):
         extraConditionOutput = ""
         if condition != "" and condition != None:
-            extraConditionOutput = "require("+condition+");\n"
+            extraConditionOutput = _require_line(condition)
         return extraConditionOutput 
 
     def output_transitions_function(self, preconditionRequire, function, preconditionAssert, functionIndex, extraConditionPre, extraConditionPost, mode):
@@ -467,7 +503,7 @@ class PASCo:
             precondictionFunction = "true"
         extraConditionOutputPre = self.get_extra_condition_output(extraConditionPre)
         extraConditionOutputPost = self.get_extra_condition_output(extraConditionPost)
-        verisolFucntionOutput = "require("+preconditionRequire+");//require for initial state\nrequire("+precondictionFunction+");//require for parameter preconditions\n" + extraConditionOutputPre + function + "\n"  + "assert(!(" + preconditionAssert + " && " + extraConditionPost + "));//reach final state\n"
+        verisolFucntionOutput = _require_line(preconditionRequire, "//require for initial state") + _require_line(precondictionFunction, "//require for parameter preconditions") + extraConditionOutputPre + function + "\n"  + "assert(!(" + preconditionAssert + " && " + extraConditionPost + "));//reach final state\n"
         return verisolFucntionOutput
 
     def output_init_function(self, preconditionAssert, extraCondition):
@@ -477,8 +513,7 @@ class PASCo:
 
     def output_valid_state(self, preconditionRequire, extraCondition):
         extraConditionOutput = self.get_extra_condition_output(extraCondition)
-        return "require("+preconditionRequire+");\n" + extraConditionOutput + "assert(false);\n"
-
+        return _require_line(preconditionRequire) + extraConditionOutput + "assert(false);\n"
 
     def print_combination(self, indexCombination, tempCombinations, mode, functions, statesNames):
         output = self, output_combination(indexCombination, tempCombinations, mode, functions, statesNames)
@@ -493,8 +528,7 @@ class PASCo:
             print(output)
 
     def create_directory(self, index):
-        current_directory = os.getcwd()
-        final_directory = os.path.join(current_directory, r'output'+str(index))
+        final_directory = os.path.join(self.SAVE_GRAPH_PATH, 'output' + str(index))
         if not os.path.exists(final_directory):
             os.makedirs(final_directory)
         return final_directory
@@ -529,13 +563,7 @@ class PASCo:
         return fileNameTemp
 
     def write_file(self, fileNameTemp, body):
-        inputfile = open(fileNameTemp, 'r').readlines()
-        write_file = open(fileNameTemp,'w')
-        for line in inputfile:
-            write_file.write(line)
-            if 'contract ' + self.contractName in line:
-                    write_file.write(body)
-        write_file.close()
+        _insert_body_into_contract(fileNameTemp, self.contractName, body)
 
     def get_valid_preconditions_output(self, preconditions, extraConditions):
         temp_output = ""
@@ -548,18 +576,25 @@ class PASCo:
             temp_output += temp_function + "}\n"
         return temp_output, tempFunctionNames
 
-    def get_valid_transitions_output(self, arg, preconditionsThread, preconditions, extraConditionsTemp, extraConditions, statesThread, mode):
+    def get_valid_transitions_output(self, arg, preconditionsThread, preconditions, extraConditionsTemp, extraConditions, statesThread, states, mode):
         tempFunctionNames = []
         tempToolCommands = []
         tempDirectories = []
         try:
             for indexPreconditionRequire, preconditionRequire in enumerate(preconditionsThread):
-                #TODO refactorizar esto, no tiene sentido que se pase el indexPreconditionRequire
-                #busco el índice real de la precondición, preconditionsThread va a tener solo un elemento, por lo que indexPreconditionRequire siempre es 0
-                for indexPreconditionAssert, preconditionAssert in enumerate(preconditions):
-                    if str(preconditionRequire) == str(preconditionAssert):
-                        indexPreconditionRequireReal = indexPreconditionRequire
+                indexPreconditionRequireReal = None
+                current_state = list(statesThread[indexPreconditionRequire])
+                for indexState, state in enumerate(states):
+                    if list(state) == current_state:
+                        indexPreconditionRequireReal = indexState
                         break
+                if indexPreconditionRequireReal is None:
+                    for indexPreconditionAssert, preconditionAssert in enumerate(preconditions):
+                        if str(preconditionRequire) == str(preconditionAssert):
+                            indexPreconditionRequireReal = indexPreconditionAssert
+                            break
+                if indexPreconditionRequireReal is None:
+                    raise Exception(f"Could not find global index for state {current_state}")
                 for indexPreconditionAssert, preconditionAssert in enumerate(preconditions):
                     for indexFunction, function in enumerate(self.functions):
                         extraConditionPre = extraConditionsTemp[indexPreconditionRequire]
@@ -570,12 +605,11 @@ class PASCo:
                             temp_function = self.functionOutput(functionName) + "\n"
                             temp_function += self.output_transitions_function(preconditionRequire, function, preconditionAssert, indexFunction, extraConditionPre, extraConditionPost, mode)
                             temp_function += "}\n"
-                            # TODO ejecutar aca Verisol para cada fn?
                             dirname = str(arg)+"_"+functionName
                             final_directory = self.create_directory(dirname)
                             fileNameTemp = self.create_file(dirname, final_directory)
                             self.write_file(fileNameTemp, temp_function)
-                            tool = f"VeriSol {fileNameTemp} {self.contractName}"
+                            tool = f"VeriSol {os.path.basename(fileNameTemp)} {self.contractName}"
                             tempToolCommands.append(tool)
                             tempDirectories.append(final_directory)
         except Exception as e:
@@ -590,7 +624,6 @@ class PASCo:
         temp_function += self.output_init_function(preconditionAssert, extraConditions[indexPreconditionAssert])
         temp_output += temp_function + "}\n"
         return functionName, temp_output
-
 
     def try_init(self, states, mode, extraConditions, preconditions):
         try:
@@ -608,13 +641,12 @@ class PASCo:
                 final_directory = self.create_directory(dirname)
                 fileNameTemp = self.create_file(dirname, final_directory)
                 self.write_file(fileNameTemp, body)
-                tool = f"VeriSol {fileNameTemp} {self.contractName}"
+                tool = f"VeriSol {os.path.basename(fileNameTemp)} {self.contractName}"
                 
                 tempFunctionNames.append(functionName)
                 tool_commands.append(tool)
                 final_directories.append(final_directory)
 
-            # Ejecutar en paralelo
             results = self.execute_try_command_in_parallel(tool_commands, tempFunctionNames, final_directories, [], states, txBound_constructor, mode, QUERY_TYPE)
 
             if len(results) != len(tempFunctionNames):
@@ -624,7 +656,6 @@ class PASCo:
                 print("Error: La longitud de resultados no coincide con los nombres de funciones.")
                 traceback.print_exc()
                 exit(1)
-
 
             for functionName, success, to_or_fail in results:
                 if success:
@@ -639,19 +670,303 @@ class PASCo:
             print(f"Exeption in method try_init: {e}")
             traceback.print_exc()
 
-
     def get_temp_function_name(self, indexPrecondtion, indexAssert, indexFunction):
         return str(indexPrecondtion) + "x" + str(indexAssert) + "x" + str(indexFunction)
 
+    # -------------------------------------------------------------------------
+    # MUST-transition analysis  (Algorithm del paper)
+    # -------------------------------------------------------------------------
+
+    def output_enabledness_function(self, preconditionRequire, functionIndex, extraConditionPre):
+        pre_f = self.functionPreconditions[functionIndex]
+        extra = self.get_extra_condition_output(extraConditionPre)
+        return (
+            _require_line(preconditionRequire, "//QUERY_ENABLEDNESS: require initial state")
+            + extra
+            + f"assert({pre_f});//QUERY_ENABLEDNESS: function must be enabled\n"
+        )
+
+    def output_must_function(self, preconditionRequire, function, preconditionAssert,
+                             functionIndex, extraConditionPre, extraConditionPost,
+                             concrete_cexamples):
+        """
+        Versión del método de instancia. Recibe concrete_cexamples como lista de
+        expresiones concretas ("x == 12 && state == 0 && owner == address(4)").
+        """
+        pre_f = self.functionPreconditions[functionIndex]
+        extra_pre = self.get_extra_condition_output(extraConditionPre)
+        check_state_call = _build_check_state_call(self.counterexampleSpecs, self.contractName, "QUERY_MUST")
+
+        cex_requires = "".join(
+            f"require(!({c}));//QUERY_MUST: exclude concrete counterexample\n"
+            for c in concrete_cexamples
+        )
+
+        post_cond = extraConditionPost if extraConditionPost.strip() else "true"
+        return (
+            _require_line(preconditionRequire, "//QUERY_MUST: require initial state")
+            + _require_line(pre_f, "//QUERY_MUST: require function precondition")
+            + cex_requires
+            + extra_pre
+            + check_state_call
+            + function + "\n"
+            + f"assert({preconditionAssert} && {post_cond});//QUERY_MUST: must reach dest\n"
+        )
+
+    def output_may_function(self, preconditionRequire, function, preconditionAssert,
+                            functionIndex, extraConditionPre, extraConditionPost,
+                            concrete_cexample):
+        """
+        Versión del método de instancia. Recibe concrete_cexample como expresión
+        concreta ("x == 12 && state == 0 && owner == address(4)").
+        """
+        pre_f = self.functionPreconditions[functionIndex]
+        extra_pre = self.get_extra_condition_output(extraConditionPre)
+        check_state_call = _build_check_state_call(self.counterexampleSpecs, self.contractName, "QUERY_MAY")
+
+        return (
+            _require_line(preconditionRequire, "//QUERY_MAY: require initial state")
+            + _require_line(pre_f, "//QUERY_MAY: require function precondition")
+            + _require_line(concrete_cexample, "//QUERY_MAY: fix concrete counterexample state")
+            + extra_pre
+            + check_state_call
+            + function + "\n"
+            + f"assert(!({preconditionAssert}));//QUERY_MAY: must NOT reach dest from counterexample\n"
+        )
+
+    def run_single_query(self, query_body, query_label, QUERY_TYPE, inject_check_state=False):
+        safe_label = _safe_query_label(query_label)
+        dirname = f"_must_{safe_label}"
+        final_directory = self.create_directory(dirname)
+        try:
+            fileNameTemp = self.create_file(dirname, final_directory)
+
+            func_name = safe_label
+            body = self.functionOutput(func_name) + "\n" + query_body + "}\n"
+            self.write_file(fileNameTemp, body)
+
+            # Inyectar check_state sobre el archivo final que se va a pasar a VeriSol.
+            if inject_check_state and self.counterexampleSpecs:
+                _inject_check_state(fileNameTemp, self.contractName, self.counterexampleSpecs)
+                with open(fileNameTemp, "r") as f:
+                    final_source = f.read()
+                expected_func = f"check_state_{self.contractName}"
+                if not _has_function_definition(final_source, expected_func):
+                    raise RuntimeError(f"{expected_func} was not injected into {fileNameTemp}")
+
+            tool = f"VeriSol {os.path.basename(fileNameTemp)} {self.contractName}"
+            feasible, to_or_fail, query_values = try_command_task(
+                func_name, [func_name], tool, final_directory, [],
+                self.txBound, self.time_out, self.trackAllVars, Mode.epa,
+                self.functions, self.statesNames, [], self.verbose,
+                QUERY_TYPE, self.contractName, self.tool_output, self.TRACK_VARS,
+            )
+            if query_values:
+                self.query_list.append(query_values)
+            return feasible, to_or_fail
+        except Exception as e:
+            traceback.print_exc()
+            print(f"Error in run_single_query ({query_label}): {e}")
+            return False, "error"
+        finally:
+            if not self.verbose:
+                self.delete_directory(final_directory)
     
+    def analyze_must_transitions(self, preconditions, states, extraConditions, mode):
+        print("\nStarting analyze_must_transitions (parallel)...")
+        N = self.mustLoopBound
+
+        edges = self.dict_nodes_edges['edges']
+
+        constructor_edges = [e for e in edges if len(e) == 3]
+        functional_edges  = [e for e in edges if len(e) != 3]
+
+        def is_time_transition(fn):
+            return fn.replace(";", "").strip() == "t()"
+    
+        t_edges = [e for e in functional_edges if is_time_transition(self.functions[e[6]])]
+        non_t_edges = [e for e in functional_edges if not is_time_transition(self.functions[e[6]])]
+
+        t_classified = []
+        t_groups = defaultdict(list)
+        for e in t_edges:
+            t_groups[e[0]].append(e)
+
+        for src_str, group in t_groups.items():
+            if len(group) == 1:
+                e = group[0]
+                src, dst, func_label, _, idx_src, idx_dst, idx_func = e
+                t_classified.append((src, dst, func_label, True, idx_src, idx_dst, idx_func))
+                print(f"  [t()] Must (single dest): {src} -> {dst}")
+            else:
+                winning_dsts = frozenset(e[1] for e in group)
+                for e in group:
+                    src, dst, func_label, _, idx_src, idx_dst, idx_func = e
+                    t_classified.append((src, dst, func_label, "HyperMust", idx_src, idx_dst, idx_func, winning_dsts))
+                print(f"  [t()] HyperMust: {src_str} -> {list(winning_dsts)}")
+
+        # ------------------------------------------------------------------
+        # FASE 1: Must / May  (solo non_t_edges)
+        # ------------------------------------------------------------------
+        queried_edges = []
+
+        with ProcessPoolExecutor(max_workers=self.max_cores) as executor:
+            future_to_edge = {
+                executor.submit(
+                    analyze_single_edge_task,
+                    edge,
+                    list(preconditions),
+                    list(extraConditions),
+                    self.functions,
+                    self.functionPreconditions,
+                    self.functionVariables,
+                    self.contractName,
+                    self.fileName,
+                    self.txBound,
+                    self.time_out,
+                    self.trackAllVars,
+                    self.verbose,
+                    self.tool_output,
+                    self.TRACK_VARS,
+                    self.statesNames,
+                    self.counterexampleSpecs,  # <- specs pasadas al proceso paralelo
+                    N,
+                    self.SAVE_GRAPH_PATH,
+                ): edge
+                for edge in non_t_edges
+            }
+
+            for future in as_completed(future_to_edge):
+                original_edge = future_to_edge[future]
+                src, dst, func_label, _, idx_src, idx_dst, idx_func = original_edge
+                try:
+                    _, result_must, query_list_local = future.result()
+                    self.query_list.extend(query_list_local)
+                except Exception as e:
+                    traceback.print_exc()
+                    print(f"Error analyzing edge {original_edge}: {e}")
+                    result_must = False
+                queried_edges.append((src, dst, func_label, result_must, idx_src, idx_dst, idx_func))
+
+        # ------------------------------------------------------------------
+        # FASE 2: HyperMust sobre los May de non_t_edges
+        # ------------------------------------------------------------------
+        may_edges   = [e for e in queried_edges if e[3] is False]
+        resolved_edges = [e for e in queried_edges if e[3] is not False]
+
+        groups: dict[tuple, list] = defaultdict(list)
+        for e in may_edges:
+            groups[(e[0], e[2])].append(e)
+
+        hypermust_groups  = {k: v for k, v in groups.items() if len(v) >= 2}
+        singleton_may     = [e for k, v in groups.items() if len(v) < 2 for e in v]
+
+        print(f"\n  [hypermust] {len(hypermust_groups)} group(s) of May edges to check for HyperMust.")
+
+        hypermust_results: dict[tuple, tuple] = {}
+
+        if hypermust_groups:
+            with ProcessPoolExecutor(max_workers=self.max_cores) as executor:
+                future_to_key = {
+                    executor.submit(
+                        check_hypermust_for_group,
+                        group_edges,
+                        list(preconditions),
+                        list(extraConditions),
+                        self.functions,
+                        self.functionPreconditions,
+                        self.functionVariables,
+                        self.contractName,
+                        self.fileName,
+                        self.txBound,
+                        self.time_out,
+                        self.trackAllVars,
+                        self.verbose,
+                        self.tool_output,
+                        self.TRACK_VARS,
+                        self.statesNames,
+                        self.SAVE_GRAPH_PATH,
+                    ): key
+                    for key, group_edges in hypermust_groups.items()
+                }
+
+                for future in as_completed(future_to_key):
+                    key = future_to_key[future]
+                    try:
+                        found, combo_indices, qlist = future.result()
+                        self.query_list.extend(qlist)
+                        hypermust_results[key] = (found, combo_indices)
+                    except Exception as e:
+                        traceback.print_exc()
+                        print(f"Error in hypermust check for group {key}: {e}")
+                        hypermust_results[key] = (False, None)
+
+        final_may_edges = []
+        for key, group_edges in hypermust_groups.items():
+            found, combo_indices = hypermust_results.get(key, (False, None))
+            if found and combo_indices is not None:
+                winning_dsts = frozenset(group_edges[i][1] for i in combo_indices)
+                for e in group_edges:
+                    src, dst, func_label, _, idx_src, idx_dst, idx_func = e
+                    if dst in winning_dsts:
+                        final_may_edges.append((src, dst, func_label, "HyperMust", idx_src, idx_dst, idx_func, winning_dsts))
+                    else:
+                        final_may_edges.append(e)
+            else:
+                final_may_edges.extend(group_edges)
+
+        self.dict_nodes_edges['edges'] = (
+            constructor_edges
+            + t_classified
+            + resolved_edges
+            + singleton_may
+            + final_may_edges
+        )
+        print("analyze_must_transitions finished (parallel).\n")
+
+    def create_must_graph(self):
+        dot = graphviz.Digraph(comment=self.fileName)
+        for n in self.dict_nodes_edges['nodes']:
+            dot.node(n[0], n[1])
+
+        for e in self.dict_nodes_edges['edges']:
+            if len(e) == 3:
+                dot.edge(e[0], e[1], label=str(e[2]), color="blue")
+            else:
+                src_str, dst_str, func_label, is_must = e[0], e[1], e[2], e[3]
+                style = "dashed" if str(func_label).replace(";", "").strip().startswith("t(") else "solid"
+                if is_must == "HyperMust":
+                    dot.edge(src_str, dst_str, label=str(func_label), color="turquoise", style=style)
+                elif is_must is True:
+                    dot.edge(src_str, dst_str, label=str(func_label), color="blue", style=style)
+                else:
+                    dot.edge(src_str, dst_str, label=str(func_label), style=style)
+        return dot
+
+    def create_graph_from(self, nodes, edges):
+        dot = graphviz.Digraph(comment=self.fileName)
+        for n in nodes:
+            dot.node(n[0], n[1])
+        for e in edges:
+            dot.edge(e[0], e[1], label=str(e[2]))
+        return dot
+
+    def create_graph(self):
+        return self.create_graph_from(self.dict_nodes_edges['nodes'], self.dict_nodes_edges['edges'])
 
     def add_node_to_graph(self, indexPreconditionRequire, indexPreconditionAssert, indexFunction, statesTemp, states, succes_by_to, mode):
         self.dict_nodes_edges['nodes'].append((self.combinationToString(statesTemp[indexPreconditionRequire]), output_combination(indexPreconditionRequire, statesTemp, mode, self.functions, self.statesNames)))
         self.dict_nodes_edges['nodes'].append((self.combinationToString(states[indexPreconditionAssert]), output_combination(indexPreconditionAssert, states, mode, self.functions, self.statesNames)))
-        # dummy transitions are not added to the graph
         if not self.functions[indexFunction].startswith("dummy_"):
-            self.dict_nodes_edges['edges'].append((self.combinationToString(statesTemp[indexPreconditionRequire]),self.combinationToString(states[indexPreconditionAssert]) , self.functions[indexFunction]+succes_by_to))
-
+            self.dict_nodes_edges['edges'].append((
+                self.combinationToString(statesTemp[indexPreconditionRequire]),
+                self.combinationToString(states[indexPreconditionAssert]),
+                self.functions[indexFunction] + succes_by_to,
+                False,
+                indexPreconditionRequire,
+                indexPreconditionAssert,
+                indexFunction,
+            ))
 
     def reduceCombinations(self, cant_preconditions, preconditionsThreads, statesThreads, extraConditionsThreads, mode, states):
         print(f"Starting task reduceCombinations for '{cant_preconditions}' states")
@@ -676,7 +991,7 @@ class PASCo:
                 fileNameTemp = self.create_file(arg, final_directory)
                 body,fuctionCombinations = self.get_valid_preconditions_output(preconditionsTemp, extraConditionsTemp)
                 self.write_file(fileNameTemp, body)
-                tool = f"VeriSol {fileNameTemp} {self.contractName}"
+                tool = f"VeriSol {os.path.basename(fileNameTemp)} {self.contractName}"
                 toolCommands.append(tool)
                 tempFunctionNames.append(fuctionCombinations[0])
                 final_directories.append(final_directory)
@@ -684,11 +999,8 @@ class PASCo:
                 statesTempList.append(statesTemp)
                 extraConditionsTempList.append(extraConditionsTemp)
                 
-                
-            # Ejecutar en paralelo
             results = self.execute_try_command_in_parallel_reduce(args, toolCommands, tempFunctionNames, final_directories, statesTempList, mode, states, QUERY_TYPE)
 
-            
             for i, functionName, success, to_or_fail in results:
                 indexPreconditionRequire, _, _ = get_params_from_function_name(functionName)
                 preconditionsTemp2 = []
@@ -732,15 +1044,12 @@ class PASCo:
                 preconditionsTemp = preconditionsThreads[arg]
                 statesTemp = statesThreads[arg]
                 extraConditionsTemp = extraConditionsThreads[arg]
-                #TODO refactorizar esto, simplificar ahora que se guarda un archivo por query                
-                toolCommands, functionNames, directories = self.get_valid_transitions_output(arg, preconditionsTemp, preconditions, extraConditionsTemp, extraConditions, statesTemp, mode)
+                toolCommands, functionNames, directories = self.get_valid_transitions_output(arg, preconditionsTemp, preconditions, extraConditionsTemp, extraConditions, statesTemp, states, mode)
                 tempToolCommands.extend(toolCommands)
                 tempFunctionNames.extend(functionNames)
                 tempDirectories.extend(directories)
                 
-                # se usa el mismo statesTemp para estas functionNames
-                statesTempList.extend([statesTemp]*len(functionNames))
-                # en args voy guardarndo un identificador para cada query
+                statesTempList.extend([states]*len(functionNames))
                 for _ in range(0, len(functionNames)):
                     args.append(cont)
                     cont += 1
@@ -754,8 +1063,6 @@ class PASCo:
                     print("longitud de args: ", len(args))
                     exit(1)
                 
-                
-            
             if self.verbose:
                 print(f"Processing transactions: {tempFunctionNames}")
 
@@ -768,7 +1075,6 @@ class PASCo:
                 print("Error: La longitud de resultados no coincide con los nombres de funciones.")
                 traceback.print_exc()
                 exit(1)
-
 
             for i, functionName, success, to_or_fail in results:
                 indexPreconditionRequire, indexPreconditionAssert, indexFunction = get_params_from_function_name(functionName)
@@ -810,7 +1116,6 @@ class PASCo:
                     elif to_or_fail != "":
                         number_corral_fail += 1
 
-                    # Extiende `query_list` con los valores obtenidos
                     if query_values:
                         self.query_list.append(query_values)
                 except Exception as e:
@@ -826,16 +1131,6 @@ class PASCo:
 
     def execute_try_command_in_parallel(self, toolCommands, tempFunctionNames, final_directories, statesTemp, states, txBound, mode, QUERY_TYPE):
         global number_to, number_corral_fail, number_corral_fail_with_tackvars
-        """
-        Ejecuta try_command en paralelo y actualiza las variables compartidas.
-
-        Args:
-            function_names (list): Lista de nombres de función a procesar.
-            tool (str): Comando base de la herramienta.
-
-        Returns:
-            list: Resultados de las ejecuciones paralelas.
-        """
 
         results = []
         errors = []
@@ -857,7 +1152,6 @@ class PASCo:
                     elif to_or_fail != "":
                         number_corral_fail += 1
 
-                    # Extiende `query_list` con los valores obtenidos
                     if query_values:
                         self.query_list.append(query_values)
                 except Exception as e:
@@ -879,85 +1173,38 @@ if __name__ == "__main__":
     
     sys.path.append(os.path.join(os.getcwd(), "Configs"))
 
-    parser.add_argument(
-        '--file',
-        default='.',
-        required=True,
-        help='ConfigFile to run the tool. Example: HelloBlockchainConfig'
-    )
-
-    parser.add_argument(
-        '--mode',
-        default=[],
-        choices=[Mode.epa.value, Mode.states.value],
-        action='append',
-        required=True,
-        help='Mode to execute the tool. Options are "epa" and/or "states"'
-    )
-
-    parser.add_argument(
-        '--txBound',
-        required=False,
-        default='.',
-        help='parameter to bound the number of transactions. Default is 8'
-    )
-
-    parser.add_argument(
-        '--time_out',
-        required=False,
-        default='600',
-        help='parameter to bound the time of execution. Default is 600 seconds; 0 means no time out'
-    )
-
-    parser.add_argument(
-        '--folder_store_results',
-        required=False,
-        default='graph',
-        help='path to store the results. Default is stored in current_dir/graph'
-    )
-
-    parser.add_argument(
-        '--verbose',
-        required=False,
-        default=False,
-        help='Option to print extra information during abstraction generation'
-    )
-
-    parser.add_argument(
-        '--reduceStates',
-        required=False,
-        default=True,
-        help='optimization to discard states that are not reachable at a first stage'
-    )
-
-    parser.add_argument(
-        '--reduceTrue',
-        required=False,
-        default=True,
-        help='optimization to reduce states that has True as preconditions'
-    )
-
-    parser.add_argument(
-        '--reduceEqual',
-        required=False,
-        default=True,
-        help='optimization to reduce states that has the same preconditions'
-    )
-
-    parser.add_argument(
-        '--trackAllVars',
-        required=False,
-        default=True,
-        help='parameter to track all variables by corral. Default is True'
-    )
-
-    parser.add_argument(
-        '--max_cores',
-        required=False,
-        default=os.cpu_count(),
-        help='parameter to set the number of cores to use. Default is the number of cores in current computer'
-    )
-
+    parser.add_argument('--file', default='.', required=True,
+        help='ConfigFile to run the tool. Example: HelloBlockchainConfig')
+    parser.add_argument('--mode', default=[], choices=[Mode.epa.value, Mode.states.value],
+        action='append', required=True,
+        help='Mode to execute the tool. Options are "epa" and/or "states"')
+    parser.add_argument('--txBound', required=False, default='.',
+        help='parameter to bound the number of transactions. Default is 8')
+    parser.add_argument('--time_out', required=False, default='600',
+        help='parameter to bound the time of execution. Default is 600 seconds; 0 means no time out')
+    parser.add_argument('--folder_store_results', required=False, default='graph',
+        help='path to store the results. Default is stored in current_dir/graph')
+    parser.add_argument('--verbose', required=False, default=False,
+        help='Option to print extra information during abstraction generation')
+    parser.add_argument('--reduceStates', required=False, default=True,
+        help='optimization to discard states that are not reachable at a first stage')
+    parser.add_argument('--reduceTrue', required=False, default=True,
+        help='optimization to reduce states that has True as preconditions')
+    parser.add_argument('--reduceEqual', required=False, default=True,
+        help='optimization to reduce states that has the same preconditions')
+    parser.add_argument('--trackAllVars', required=False, default=True,
+        help='parameter to track all variables by corral. Default is True')
+    parser.add_argument('--max_cores', required=False, default=os.cpu_count(),
+        help='parameter to set the number of cores to use. Default is the number of cores in current computer')
+    parser.add_argument('--must', required=False, default=False, action='store_true',
+        help='parameter to generate graphs with must transitions. Pass just --must to enable. Default is False')
+    parser.add_argument('--savepdf', required=False, default=True,
+        help='whether to save the output graph as PDF. Default is True')
+    parser.add_argument('--dot', required=False, default=None,
+        help="(optional) ruta a un archivo '<config>_<epa|states>_maygraph.dot' generado en una corrida "
+             "previa (con o sin --must). Si se pasa junto con --must, se usa como punto de partida del "
+             "análisis must, evitando recalcular el grafo May (la parte más lenta). Si no se pasa, el "
+             "grafo May se calcula normalmente. Se ignora si --must no está habilitado.")
 
     args = parser.parse_args()
 
@@ -976,7 +1223,10 @@ if __name__ == "__main__":
         reduceTrue=args.reduceTrue,
         reduceEqual=args.reduceEqual,
         trackAllVars=args.trackAllVars,
-        max_cores=int(args.max_cores)
+        max_cores=int(args.max_cores),
+        must=args.must,
+        savepdf=str(args.savepdf).lower() == 'true',
+        dot=args.dot,
     )
     
     pasco.run()

@@ -1,0 +1,5 @@
+Subject: ValidatorAuction-Mode.epa
+Total time: 157.42030572891235
+# Time Out: 0
+# Corral Fail without trackvars: 0
+# Corral Fail with trackvars: 0

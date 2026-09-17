@@ -1,0 +1,5 @@
+Subject: DefectiveComponentCounter-Mode.epa
+Total time: 6.168057203292847
+# Time Out: 0
+# Corral Fail without trackvars: 0
+# Corral Fail with trackvars: 0

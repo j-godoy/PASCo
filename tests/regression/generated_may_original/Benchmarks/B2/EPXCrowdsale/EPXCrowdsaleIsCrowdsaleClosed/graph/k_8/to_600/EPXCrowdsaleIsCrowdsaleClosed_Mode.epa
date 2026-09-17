@@ -1,0 +1,191 @@
+// Contracts/EPXCrowdsaleIsCrowdsaleClosed.sol
+digraph {
+	"1-0-0-0-5-0-" [label="SetupCrowdsale(_fundingStartBlock, _fundingEndBlock);
+t();
+"]
+	"1-0-0-0-5-0-" [label="SetupCrowdsale(_fundingStartBlock, _fundingEndBlock);
+t();
+"]
+	"1-0-0-0-5-0-" [label="SetupCrowdsale(_fundingStartBlock, _fundingEndBlock);
+t();
+"]
+	"0-0-3-0-5-0-" [label="checkGoalReached();
+t();
+"]
+	"1-0-0-0-5-0-" [label="SetupCrowdsale(_fundingStartBlock, _fundingEndBlock);
+t();
+"]
+	"0-2-3-0-5-0-" [label="buy();
+checkGoalReached();
+t();
+"]
+	"0-0-3-0-5-0-" [label="checkGoalReached();
+t();
+"]
+	"0-0-3-0-5-0-" [label="checkGoalReached();
+t();
+"]
+	"0-0-3-0-5-0-" [label="checkGoalReached();
+t();
+"]
+	"0-0-3-0-5-0-" [label="checkGoalReached();
+t();
+"]
+	"0-0-3-0-5-0-" [label="checkGoalReached();
+t();
+"]
+	"0-2-3-0-5-0-" [label="buy();
+checkGoalReached();
+t();
+"]
+	"0-0-3-0-5-0-" [label="checkGoalReached();
+t();
+"]
+	"0-0-3-0-5-6-" [label="checkGoalReached();
+t();
+dummy_isCrowdsaleClosed();
+"]
+	"0-0-3-0-5-0-" [label="checkGoalReached();
+t();
+"]
+	"0-0-3-4-5-6-" [label="checkGoalReached();
+refund();
+t();
+dummy_isCrowdsaleClosed();
+"]
+	"0-2-3-0-5-0-" [label="buy();
+checkGoalReached();
+t();
+"]
+	"0-0-3-0-5-0-" [label="checkGoalReached();
+t();
+"]
+	"0-2-3-0-5-0-" [label="buy();
+checkGoalReached();
+t();
+"]
+	"0-0-3-0-5-0-" [label="checkGoalReached();
+t();
+"]
+	"0-2-3-0-5-0-" [label="buy();
+checkGoalReached();
+t();
+"]
+	"0-2-3-0-5-0-" [label="buy();
+checkGoalReached();
+t();
+"]
+	"0-2-3-0-5-0-" [label="buy();
+checkGoalReached();
+t();
+"]
+	"0-2-3-0-5-0-" [label="buy();
+checkGoalReached();
+t();
+"]
+	"0-2-3-0-5-0-" [label="buy();
+checkGoalReached();
+t();
+"]
+	"0-2-3-0-5-0-" [label="buy();
+checkGoalReached();
+t();
+"]
+	"0-0-3-0-5-6-" [label="checkGoalReached();
+t();
+dummy_isCrowdsaleClosed();
+"]
+	"0-0-3-0-5-6-" [label="checkGoalReached();
+t();
+dummy_isCrowdsaleClosed();
+"]
+	"0-0-3-0-5-6-" [label="checkGoalReached();
+t();
+dummy_isCrowdsaleClosed();
+"]
+	"0-0-3-0-5-6-" [label="checkGoalReached();
+t();
+dummy_isCrowdsaleClosed();
+"]
+	"0-0-3-0-5-6-" [label="checkGoalReached();
+t();
+dummy_isCrowdsaleClosed();
+"]
+	"0-0-3-0-5-6-" [label="checkGoalReached();
+t();
+dummy_isCrowdsaleClosed();
+"]
+	"0-0-3-4-5-6-" [label="checkGoalReached();
+refund();
+t();
+dummy_isCrowdsaleClosed();
+"]
+	"0-0-3-0-5-6-" [label="checkGoalReached();
+t();
+dummy_isCrowdsaleClosed();
+"]
+	"0-0-3-4-5-6-" [label="checkGoalReached();
+refund();
+t();
+dummy_isCrowdsaleClosed();
+"]
+	"0-0-3-4-5-6-" [label="checkGoalReached();
+refund();
+t();
+dummy_isCrowdsaleClosed();
+"]
+	"0-0-3-4-5-6-" [label="checkGoalReached();
+refund();
+t();
+dummy_isCrowdsaleClosed();
+"]
+	"0-0-3-4-5-6-" [label="checkGoalReached();
+refund();
+t();
+dummy_isCrowdsaleClosed();
+"]
+	"0-0-3-4-5-6-" [label="checkGoalReached();
+refund();
+t();
+dummy_isCrowdsaleClosed();
+"]
+	"0-0-3-4-5-6-" [label="checkGoalReached();
+refund();
+t();
+dummy_isCrowdsaleClosed();
+"]
+	"0-0-3-4-5-6-" [label="checkGoalReached();
+refund();
+t();
+dummy_isCrowdsaleClosed();
+"]
+	"0-0-3-4-5-6-" [label="checkGoalReached();
+refund();
+t();
+dummy_isCrowdsaleClosed();
+"]
+	init [label=init]
+	"1-0-0-0-5-0-" [label="SetupCrowdsale(_fundingStartBlock, _fundingEndBlock);
+t();
+"]
+	"1-0-0-0-5-0-" -> "1-0-0-0-5-0-" [label="t();"]
+	"1-0-0-0-5-0-" -> "0-0-3-0-5-0-" [label="SetupCrowdsale(_fundingStartBlock, _fundingEndBlock);"]
+	"1-0-0-0-5-0-" -> "0-2-3-0-5-0-" [label="SetupCrowdsale(_fundingStartBlock, _fundingEndBlock);"]
+	"0-0-3-0-5-0-" -> "0-0-3-0-5-0-" [label="checkGoalReached();"]
+	"0-0-3-0-5-0-" -> "0-0-3-0-5-0-" [label="t();"]
+	"0-0-3-0-5-0-" -> "0-2-3-0-5-0-" [label="t();"]
+	"0-0-3-0-5-0-" -> "0-0-3-0-5-6-" [label="checkGoalReached();"]
+	"0-0-3-0-5-0-" -> "0-0-3-4-5-6-" [label="checkGoalReached();"]
+	"0-2-3-0-5-0-" -> "0-0-3-0-5-0-" [label="buy();"]
+	"0-2-3-0-5-0-" -> "0-0-3-0-5-0-" [label="t();"]
+	"0-2-3-0-5-0-" -> "0-2-3-0-5-0-" [label="buy();"]
+	"0-2-3-0-5-0-" -> "0-2-3-0-5-0-" [label="checkGoalReached();"]
+	"0-2-3-0-5-0-" -> "0-2-3-0-5-0-" [label="t();"]
+	"0-0-3-0-5-6-" -> "0-0-3-0-5-6-" [label="checkGoalReached();"]
+	"0-0-3-0-5-6-" -> "0-0-3-0-5-6-" [label="t();"]
+	"0-0-3-4-5-6-" -> "0-0-3-0-5-6-" [label="refund();"]
+	"0-0-3-4-5-6-" -> "0-0-3-4-5-6-" [label="checkGoalReached();"]
+	"0-0-3-4-5-6-" -> "0-0-3-4-5-6-" [label="refund();"]
+	"0-0-3-4-5-6-" -> "0-0-3-4-5-6-" [label="t();"]
+	init -> "1-0-0-0-5-0-" [label=constructor]
+}

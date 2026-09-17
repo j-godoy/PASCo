@@ -1,0 +1,5 @@
+Subject: BasicProvenance-Mode.epa
+Total time: 6.457614183425903
+# Time Out: 0
+# Corral Fail without trackvars: 0
+# Corral Fail with trackvars: 0

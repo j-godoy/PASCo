@@ -1,0 +1,61 @@
+// Contracts/RefrigeratedTransportation_fixed.sol
+digraph {
+	"1-2-0-" [label="IngestTelemetry(humidity, temperature, timestamp);
+TransferResponsibility(newCounterparty);
+"]
+	"0-0-0-" [label=Vacio
+]
+	"1-2-0-" [label="IngestTelemetry(humidity, temperature, timestamp);
+TransferResponsibility(newCounterparty);
+"]
+	"1-2-0-" [label="IngestTelemetry(humidity, temperature, timestamp);
+TransferResponsibility(newCounterparty);
+"]
+	"1-2-0-" [label="IngestTelemetry(humidity, temperature, timestamp);
+TransferResponsibility(newCounterparty);
+"]
+	"1-2-3-" [label="IngestTelemetry(humidity, temperature, timestamp);
+TransferResponsibility(newCounterparty);
+Complete();
+"]
+	"1-2-3-" [label="IngestTelemetry(humidity, temperature, timestamp);
+TransferResponsibility(newCounterparty);
+Complete();
+"]
+	"0-0-0-" [label=Vacio
+]
+	"1-2-3-" [label="IngestTelemetry(humidity, temperature, timestamp);
+TransferResponsibility(newCounterparty);
+Complete();
+"]
+	"0-0-0-" [label=Vacio
+]
+	"1-2-3-" [label="IngestTelemetry(humidity, temperature, timestamp);
+TransferResponsibility(newCounterparty);
+Complete();
+"]
+	"1-2-3-" [label="IngestTelemetry(humidity, temperature, timestamp);
+TransferResponsibility(newCounterparty);
+Complete();
+"]
+	"1-2-3-" [label="IngestTelemetry(humidity, temperature, timestamp);
+TransferResponsibility(newCounterparty);
+Complete();
+"]
+	"1-2-3-" [label="IngestTelemetry(humidity, temperature, timestamp);
+TransferResponsibility(newCounterparty);
+Complete();
+"]
+	init [label=init]
+	"1-2-0-" [label="IngestTelemetry(humidity, temperature, timestamp);
+TransferResponsibility(newCounterparty);
+"]
+	"1-2-0-" -> "0-0-0-" [label="IngestTelemetry(humidity, temperature, timestamp);"]
+	"1-2-0-" -> "1-2-0-" [label="IngestTelemetry(humidity, temperature, timestamp);"]
+	"1-2-0-" -> "1-2-3-" [label="TransferResponsibility(newCounterparty);"]
+	"1-2-3-" -> "0-0-0-" [label="IngestTelemetry(humidity, temperature, timestamp);"]
+	"1-2-3-" -> "0-0-0-" [label="Complete();"]
+	"1-2-3-" -> "1-2-3-" [label="IngestTelemetry(humidity, temperature, timestamp);"]
+	"1-2-3-" -> "1-2-3-" [label="TransferResponsibility(newCounterparty);"]
+	init -> "1-2-0-" [label=constructor]
+}

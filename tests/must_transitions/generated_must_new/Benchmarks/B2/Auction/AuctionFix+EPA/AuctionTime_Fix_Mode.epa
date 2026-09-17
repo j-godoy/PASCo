@@ -1,0 +1,119 @@
+// Contracts/Auction.sol
+digraph {
+	"1-0-0-4-" [label="Bid();
+t();
+"]
+	"1-0-0-4-" [label="Bid();
+t();
+"]
+	"1-0-0-4-" [label="Bid();
+t();
+"]
+	"1-0-0-4-" [label="Bid();
+t();
+"]
+	"1-0-0-4-" [label="Bid();
+t();
+"]
+	"0-0-3-4-" [label="AuctionEnd();
+t();
+"]
+	"1-0-0-4-" [label="Bid();
+t();
+"]
+	"1-2-0-4-" [label="Bid();
+Withdraw();
+t();
+"]
+	"0-0-3-4-" [label="AuctionEnd();
+t();
+"]
+	"0-0-3-4-" [label="AuctionEnd();
+t();
+"]
+	"1-2-0-4-" [label="Bid();
+Withdraw();
+t();
+"]
+	"1-0-0-4-" [label="Bid();
+t();
+"]
+	"1-2-0-4-" [label="Bid();
+Withdraw();
+t();
+"]
+	"1-2-0-4-" [label="Bid();
+Withdraw();
+t();
+"]
+	"1-2-0-4-" [label="Bid();
+Withdraw();
+t();
+"]
+	"1-2-0-4-" [label="Bid();
+Withdraw();
+t();
+"]
+	"1-2-0-4-" [label="Bid();
+Withdraw();
+t();
+"]
+	"1-2-0-4-" [label="Bid();
+Withdraw();
+t();
+"]
+	"1-2-0-4-" [label="Bid();
+Withdraw();
+t();
+"]
+	"0-2-3-4-" [label="Withdraw();
+AuctionEnd();
+t();
+"]
+	"0-2-3-4-" [label="Withdraw();
+AuctionEnd();
+t();
+"]
+	"0-0-3-4-" [label="AuctionEnd();
+t();
+"]
+	"0-2-3-4-" [label="Withdraw();
+AuctionEnd();
+t();
+"]
+	"0-2-3-4-" [label="Withdraw();
+AuctionEnd();
+t();
+"]
+	"0-2-3-4-" [label="Withdraw();
+AuctionEnd();
+t();
+"]
+	"0-2-3-4-" [label="Withdraw();
+AuctionEnd();
+t();
+"]
+	init [label=init]
+	"0-0-3-4-" [label="AuctionEnd();
+t();
+"]
+	init [label=init]
+	"1-0-0-4-" [label="Bid();
+t();
+"]
+	init -> "0-0-3-4-" [label=constructor color=blue]
+	init -> "1-0-0-4-" [label=constructor color=blue]
+	"1-0-0-4-" -> "1-0-0-4-" [label="t();" color=turquoise style=dashed]
+	"1-0-0-4-" -> "0-0-3-4-" [label="t();" color=turquoise style=dashed]
+	"0-0-3-4-" -> "0-0-3-4-" [label="t();" color=blue style=dashed]
+	"1-2-0-4-" -> "1-2-0-4-" [label="t();" color=turquoise style=dashed]
+	"1-2-0-4-" -> "0-2-3-4-" [label="t();" color=turquoise style=dashed]
+	"0-2-3-4-" -> "0-2-3-4-" [label="t();" color=blue style=dashed]
+	"1-2-0-4-" -> "1-2-0-4-" [label="Bid();" color=blue style=solid]
+	"1-0-0-4-" -> "1-2-0-4-" [label="Bid();" color=turquoise style=solid]
+	"1-0-0-4-" -> "1-0-0-4-" [label="Bid();" color=turquoise style=solid]
+	"1-2-0-4-" -> "1-2-0-4-" [label="Withdraw();" color=turquoise style=solid]
+	"1-2-0-4-" -> "1-0-0-4-" [label="Withdraw();" color=turquoise style=solid]
+	"0-2-3-4-" -> "0-2-3-4-" [label="Withdraw();" color=turquoise style=solid]
+	"0-2-3-4-" -> "0-0-3-4-" [label="Withdraw();" color=turquoise style=solid]
+}

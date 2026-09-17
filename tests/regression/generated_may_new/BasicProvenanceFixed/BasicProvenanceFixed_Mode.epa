@@ -1,0 +1,26 @@
+// Contracts/BasicProvenance_fixed.sol
+digraph {
+	"1-0-" [label="TransferResponsibility(newCounterparty);
+"]
+	"1-2-" [label="TransferResponsibility(newCounterparty);
+Complete();
+"]
+	"1-2-" [label="TransferResponsibility(newCounterparty);
+Complete();
+"]
+	"0-0-" [label=Vacio
+]
+	"1-2-" [label="TransferResponsibility(newCounterparty);
+Complete();
+"]
+	"1-2-" [label="TransferResponsibility(newCounterparty);
+Complete();
+"]
+	init [label=init]
+	"1-0-" [label="TransferResponsibility(newCounterparty);
+"]
+	"1-0-" -> "1-2-" [label="TransferResponsibility(newCounterparty);"]
+	"1-2-" -> "0-0-" [label="Complete();"]
+	"1-2-" -> "1-2-" [label="TransferResponsibility(newCounterparty);"]
+	init -> "1-0-" [label=constructor]
+}

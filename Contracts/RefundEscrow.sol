@@ -1,5 +1,3 @@
-
-
 // File: installed_contracts/openzeppelin-solidity/contracts/payment/escrow/RefundEscrow.sol
 
 pragma solidity ^0.5.0;
@@ -64,8 +62,6 @@ library SafeMath {
     }
 }
 
-
-
 /**
  * @title RefundEscrow
  * @dev Escrow that holds funds for a beneficiary, deposited from multiple
@@ -80,7 +76,11 @@ library SafeMath {
 contract RefundEscrow {
     using SafeMath for uint256;
 
-    enum State { Active, Refunding, Closed }
+    enum State {
+        Active,
+        Refunding,
+        Closed
+    }
 
     event RefundsClosed();
     event RefundsEnabled();
@@ -88,12 +88,13 @@ contract RefundEscrow {
     State private _state;
     address payable private _beneficiary;
     address private _primary;
+    uint time;
 
     /**
      * @dev Constructor.
      * @param beneficiary The beneficiary of the deposits.
      */
-    constructor (address payable beneficiary) public {
+    constructor(address payable beneficiary) public {
         require(beneficiary != address(0));
         _beneficiary = beneficiary;
         _state = State.Active;
@@ -152,7 +153,7 @@ contract RefundEscrow {
      * @dev Allows for the beneficiary to withdraw their funds, rejecting
      * further deposits.
      */
-    function close() public onlyPrimary  {
+    function close() public onlyPrimary {
         require(_state == State.Active);
         _state = State.Closed;
         //emit RefundsClosed();
@@ -161,7 +162,7 @@ contract RefundEscrow {
     /**
      * @dev Allows for refunds to take place, rejecting further deposits.
      */
-    function enableRefunds() public  onlyPrimary{
+    function enableRefunds() public onlyPrimary {
         require(_state == State.Active);
         _state = State.Refunding;
         //emit RefundsEnabled();
@@ -212,19 +213,22 @@ contract RefundEscrow {
      * @dev Withdraw accumulated balance for a payee.
      * @param payee The address whose funds will be withdrawn and transferred to.
      */
-    function withdrawInternal(address payable payee) internal  {
+    function withdrawInternal(address payable payee) internal {
         uint256 payment = _deposits[payee];
         _deposits[payee] = 0;
         payee.transfer(payment);
         depositsCount -= 1;
-       // emit Withdrawn(payee, payment);
+        // emit Withdrawn(payee, payment);
     }
-
 
     function withdraw(address payable payee) public onlyPrimary {
         require(withdrawalAllowed(payee));
         require(depositsCount > 0);
         require(_deposits[payee] > 0);
         withdrawInternal(payee);
+    }
+
+    function t() public {
+        time = time + 1;
     }
 }

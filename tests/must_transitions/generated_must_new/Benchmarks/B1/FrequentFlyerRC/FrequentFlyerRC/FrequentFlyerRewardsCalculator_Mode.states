@@ -1,0 +1,12 @@
+// Contracts/FrequentFlyerRewardsCalculator.sol
+digraph {
+	"1-0-" [label=SetFlyerAndReward]
+	"0-2-" [label=MilesAdded]
+	"0-2-" [label=MilesAdded]
+	"0-2-" [label=MilesAdded]
+	init [label=init]
+	"1-0-" [label=SetFlyerAndReward]
+	init -> "1-0-" [label=constructor color=blue]
+	"1-0-" -> "0-2-" [label="AddMiles(miles);" color=blue style=solid]
+	"0-2-" -> "0-2-" [label="AddMiles(miles);" color=blue style=solid]
+}

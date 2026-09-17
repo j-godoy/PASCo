@@ -10,3 +10,4 @@ statesModeState = [[1,0,0,0], [0,2,0,0], [0,0,3,0], [0,0,0,4]]
 statesNamesModeState = [ "Created", "InTransit", "Completed", "OutOfCompliance"]
 statePreconditionsModeState = ["State == StateType.Created", "State == StateType.InTransit", "State == StateType.Completed", "State == StateType.OutOfCompliance"]
 txBound = 8
+

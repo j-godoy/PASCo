@@ -11,4 +11,4 @@ tool_output = "Found a counterexample"
 statesModeState = [[1,0], [0,2]]
 statesNamesModeState = ["Create", "ComputeTotal"]
 statePreconditionsModeState = ["State == StateType.Create", "State == StateType.ComputeTotal"]
-txBound = 8
+txBound = 13 # antes: 8
