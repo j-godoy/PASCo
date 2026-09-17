@@ -1,0 +1,5 @@
+Subject: RoomThermostat-Mode.epa
+Total time: 10.479760885238647
+# Time Out: 0
+# Corral Fail without trackvars: 0
+# Corral Fail with trackvars: 0

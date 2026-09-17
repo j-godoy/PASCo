@@ -1,0 +1,5 @@
+Subject: CounterExampleFiltering-Mode.epa
+Total time: 19.697293996810913
+# Time Out: 0
+# Corral Fail without trackvars: 0
+# Corral Fail with trackvars: 0

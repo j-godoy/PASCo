@@ -1,0 +1,35 @@
+// Contracts/RockPaperScissors.sol
+digraph {
+	"1-0-0-" [label="choicePlayer1(choice);
+"]
+	"0-0-3-" [label="determineWinner();
+"]
+	"0-2-0-" [label="choicePlayer2(choice);
+"]
+	"0-0-3-" [label="determineWinner();
+"]
+	"0-0-3-" [label="determineWinner();
+"]
+	"0-0-3-" [label="determineWinner();
+"]
+	"1-2-0-" [label="choicePlayer1(choice);
+choicePlayer2(choice);
+"]
+	"1-0-0-" [label="choicePlayer1(choice);
+"]
+	"1-2-0-" [label="choicePlayer1(choice);
+choicePlayer2(choice);
+"]
+	"0-2-0-" [label="choicePlayer2(choice);
+"]
+	init [label=init]
+	"1-2-0-" [label="choicePlayer1(choice);
+choicePlayer2(choice);
+"]
+	"1-0-0-" -> "0-0-3-" [label="choicePlayer1(choice);"]
+	"0-2-0-" -> "0-0-3-" [label="choicePlayer2(choice);"]
+	"0-0-3-" -> "0-0-3-" [label="determineWinner();"]
+	"1-2-0-" -> "1-0-0-" [label="choicePlayer2(choice);"]
+	"1-2-0-" -> "0-2-0-" [label="choicePlayer1(choice);"]
+	init -> "1-2-0-" [label=constructor]
+}

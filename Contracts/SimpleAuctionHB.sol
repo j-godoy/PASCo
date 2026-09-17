@@ -104,6 +104,7 @@ contract SimpleAuction {
         highestBidder = msg.sender;
         highestBid = msg.value;
         // emit HighestBidIncreased(msg.sender, msg.value);
+        // t();
     }
 
     /// Withdraw a bid that was overbid.
@@ -127,6 +128,7 @@ contract SimpleAuction {
             //     return false;
             // }
         }
+        // t();
         return true;
     }
 
@@ -149,10 +151,11 @@ contract SimpleAuction {
             //     return false;
             // }
         }
+        // t();
         return true;
     }
     // Users want to know when the auction ends, seconds from 1970-01-01
-    function auctionEndTime() internal view returns (uint256) {
+    function auctionEndTime() public view returns (uint256) {
         return auctionStart + biddingTime;
     }
 
@@ -180,6 +183,7 @@ contract SimpleAuction {
 
         // 3. Interaction
         // beneficiary.transfer(highestBid);
+        // t();
     }
 
     function t() public {

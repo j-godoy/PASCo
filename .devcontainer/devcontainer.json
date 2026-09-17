@@ -1,0 +1,21 @@
+{
+    "name": "PASCo",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".." 
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "JuanBlanco.solidity",
+                "joaotavora.graphviz-preview"
+            ]
+        }
+    },
+    "remoteUser": "root",
+    "workspaceFolder": "/workspace",
+    "mounts": [
+        "source=${localWorkspaceFolder},target=/workspace,type=bind"
+    ]
+}

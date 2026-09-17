@@ -1,0 +1,55 @@
+// Contracts/Crowdfunding.sol
+digraph {
+	"1-0-0-" [label="Donate();
+"]
+	"0-0-0-" [label=Vacio
+]
+	"1-0-0-" [label="Donate();
+"]
+	"1-0-0-" [label="Donate();
+"]
+	"1-0-0-" [label="Donate();
+"]
+	"0-2-0-" [label="GetFunds();
+"]
+	"1-0-0-" [label="Donate();
+"]
+	"0-0-3-" [label="Claim();
+"]
+	"0-2-0-" [label="GetFunds();
+"]
+	"0-0-0-" [label=Vacio
+]
+	"0-2-0-" [label="GetFunds();
+"]
+	"0-2-0-" [label="GetFunds();
+"]
+	"0-0-3-" [label="Claim();
+"]
+	"0-0-0-" [label=Vacio
+]
+	"0-0-3-" [label="Claim();
+"]
+	"0-0-3-" [label="Claim();
+"]
+	init [label=init]
+	"1-0-0-" [label="Donate();
+"]
+	init [label=init]
+	"0-2-0-" [label="GetFunds();
+"]
+	init [label=init]
+	"0-0-0-" [label=Vacio
+]
+	"1-0-0-" -> "0-0-0-" [label="Donate();"]
+	"1-0-0-" -> "1-0-0-" [label="Donate();"]
+	"1-0-0-" -> "0-2-0-" [label="Donate();"]
+	"1-0-0-" -> "0-0-3-" [label="Donate();"]
+	"0-2-0-" -> "0-0-0-" [label="GetFunds();"]
+	"0-2-0-" -> "0-2-0-" [label="GetFunds();"]
+	"0-0-3-" -> "0-0-0-" [label="Claim();"]
+	"0-0-3-" -> "0-0-3-" [label="Claim();"]
+	init -> "1-0-0-" [label=constructor]
+	init -> "0-2-0-" [label=constructor]
+	init -> "0-0-0-" [label=constructor]
+}

@@ -1,0 +1,5 @@
+Subject: AssetTransferFixed-Mode.epa
+Total time: 456.2014560699463
+# Time Out: 0
+# Corral Fail without trackvars: 0
+# Corral Fail with trackvars: 0

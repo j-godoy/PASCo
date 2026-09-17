@@ -1,0 +1,80 @@
+// Contracts/AuctionEnded.sol
+digraph {
+	"1-0-0-0-" [label="Bid();
+"]
+	"0-0-0-0-" [label=Vacio
+]
+	"1-0-0-0-" [label="Bid();
+"]
+	"1-0-0-0-" [label="Bid();
+"]
+	"1-0-0-0-" [label="Bid();
+"]
+	"0-2-0-0-" [label="Withdraw();
+"]
+	"1-0-0-0-" [label="Bid();
+"]
+	"1-2-0-0-" [label="Bid();
+Withdraw();
+"]
+	"0-2-0-0-" [label="Withdraw();
+"]
+	"0-0-0-0-" [label=Vacio
+]
+	"0-2-0-0-" [label="Withdraw();
+"]
+	"0-2-0-0-" [label="Withdraw();
+"]
+	"1-2-0-0-" [label="Bid();
+Withdraw();
+"]
+	"0-0-0-0-" [label=Vacio
+]
+	"1-2-0-0-" [label="Bid();
+Withdraw();
+"]
+	"1-0-0-0-" [label="Bid();
+"]
+	"1-2-0-0-" [label="Bid();
+Withdraw();
+"]
+	"0-2-0-0-" [label="Withdraw();
+"]
+	"1-2-0-0-" [label="Bid();
+Withdraw();
+"]
+	"0-2-0-0-" [label="Withdraw();
+"]
+	"1-2-0-0-" [label="Bid();
+Withdraw();
+"]
+	"1-2-0-0-" [label="Bid();
+Withdraw();
+"]
+	"1-2-0-0-" [label="Bid();
+Withdraw();
+"]
+	"1-2-0-0-" [label="Bid();
+Withdraw();
+"]
+	init [label=init]
+	"0-0-0-0-" [label=Vacio
+]
+	init [label=init]
+	"1-0-0-0-" [label="Bid();
+"]
+	init -> "0-0-0-0-" [label=constructor color=blue]
+	init -> "1-0-0-0-" [label=constructor color=blue]
+	"1-0-0-0-" -> "1-0-0-0-" [label="Bid();" color=turquoise style=solid]
+	"1-0-0-0-" -> "0-0-0-0-" [label="Bid();" color=turquoise style=solid]
+	"1-0-0-0-" -> "1-2-0-0-" [label="Bid();" color=turquoise style=solid]
+	"1-0-0-0-" -> "0-2-0-0-" [label="Bid();" color=turquoise style=solid]
+	"1-2-0-0-" -> "0-0-0-0-" [label="Withdraw();" color=turquoise style=solid]
+	"1-2-0-0-" -> "1-0-0-0-" [label="Withdraw();" color=turquoise style=solid]
+	"1-2-0-0-" -> "1-2-0-0-" [label="Withdraw();" color=turquoise style=solid]
+	"1-2-0-0-" -> "0-2-0-0-" [label="Withdraw();" color=turquoise style=solid]
+	"0-2-0-0-" -> "0-2-0-0-" [label="Withdraw();" color=turquoise style=solid]
+	"0-2-0-0-" -> "0-0-0-0-" [label="Withdraw();" color=turquoise style=solid]
+	"1-2-0-0-" -> "1-2-0-0-" [label="Bid();" color=turquoise style=solid]
+	"1-2-0-0-" -> "0-2-0-0-" [label="Bid();" color=turquoise style=solid]
+}

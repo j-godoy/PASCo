@@ -1,0 +1,11 @@
+digraph {
+
+S01->S01 [label="ingestTelemetry", style="", color="turquoise"]
+S02->S02 [label="transferResponsibility", style="", color="blue"]
+S02->S02 [label="ingestTelemetry", style="", color="turquoise"]
+S01->S04 [label="ingestTelemetry", style="", color="turquoise"]
+S00->S01 [label="constructor", style="", color="blue"]
+S01->S02 [label="transferResponsibility", style="", color="blue"]
+S02->S03 [label="complete", style="", color="blue"]
+S02->S04 [label="ingestTelemetry", style="", color="turquoise"]
+}

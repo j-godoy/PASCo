@@ -1,0 +1,181 @@
+// Contracts/SimpleAuctionEnded.sol
+digraph {
+	"1-0-0-0-" [label="bid();
+"]
+	"1-0-0-0-" [label="bid();
+"]
+	"1-0-0-0-" [label="bid();
+"]
+	"1-2-0-0-" [label="bid();
+withdraw();
+"]
+	"1-0-0-0-" [label="bid();
+"]
+	"1-0-3-0-" [label="bid();
+auctionEnd();
+"]
+	"1-0-0-0-" [label="bid();
+"]
+	"1-2-3-0-" [label="bid();
+withdraw();
+auctionEnd();
+"]
+	"0-0-3-0-" [label="auctionEnd();
+"]
+	"0-0-0-4-" [label="dummy_isEnded();
+"]
+	"0-0-0-4-" [label="dummy_isEnded();
+"]
+	"0-0-0-4-" [label="dummy_isEnded();
+"]
+	"1-2-0-0-" [label="bid();
+withdraw();
+"]
+	"1-0-0-0-" [label="bid();
+"]
+	"1-2-0-0-" [label="bid();
+withdraw();
+"]
+	"1-2-0-0-" [label="bid();
+withdraw();
+"]
+	"1-2-0-0-" [label="bid();
+withdraw();
+"]
+	"1-2-0-0-" [label="bid();
+withdraw();
+"]
+	"1-2-0-0-" [label="bid();
+withdraw();
+"]
+	"1-0-3-0-" [label="bid();
+auctionEnd();
+"]
+	"1-2-0-0-" [label="bid();
+withdraw();
+"]
+	"1-2-3-0-" [label="bid();
+withdraw();
+auctionEnd();
+"]
+	"1-2-0-0-" [label="bid();
+withdraw();
+"]
+	"1-2-3-0-" [label="bid();
+withdraw();
+auctionEnd();
+"]
+	"1-0-3-0-" [label="bid();
+auctionEnd();
+"]
+	"0-0-3-0-" [label="auctionEnd();
+"]
+	"1-0-3-0-" [label="bid();
+auctionEnd();
+"]
+	"0-0-0-4-" [label="dummy_isEnded();
+"]
+	"1-0-3-0-" [label="bid();
+auctionEnd();
+"]
+	"0-2-3-0-" [label="withdraw();
+auctionEnd();
+"]
+	"0-2-3-0-" [label="withdraw();
+auctionEnd();
+"]
+	"0-0-3-0-" [label="auctionEnd();
+"]
+	"0-2-3-0-" [label="withdraw();
+auctionEnd();
+"]
+	"0-2-3-0-" [label="withdraw();
+auctionEnd();
+"]
+	"0-2-3-0-" [label="withdraw();
+auctionEnd();
+"]
+	"0-2-0-4-" [label="withdraw();
+dummy_isEnded();
+"]
+	"0-2-0-4-" [label="withdraw();
+dummy_isEnded();
+"]
+	"0-0-0-4-" [label="dummy_isEnded();
+"]
+	"0-2-0-4-" [label="withdraw();
+dummy_isEnded();
+"]
+	"0-2-0-4-" [label="withdraw();
+dummy_isEnded();
+"]
+	"0-2-0-4-" [label="withdraw();
+dummy_isEnded();
+"]
+	"0-2-0-4-" [label="withdraw();
+dummy_isEnded();
+"]
+	"1-2-3-0-" [label="bid();
+withdraw();
+auctionEnd();
+"]
+	"0-0-3-0-" [label="auctionEnd();
+"]
+	"1-2-3-0-" [label="bid();
+withdraw();
+auctionEnd();
+"]
+	"0-2-3-0-" [label="withdraw();
+auctionEnd();
+"]
+	"1-2-3-0-" [label="bid();
+withdraw();
+auctionEnd();
+"]
+	"0-2-3-0-" [label="withdraw();
+auctionEnd();
+"]
+	"1-2-3-0-" [label="bid();
+withdraw();
+auctionEnd();
+"]
+	"0-2-0-4-" [label="withdraw();
+dummy_isEnded();
+"]
+	init [label=init]
+	"0-0-3-0-" [label="auctionEnd();
+"]
+	init [label=init]
+	"1-0-0-0-" [label="bid();
+"]
+	init [label=init]
+	"1-0-3-0-" [label="bid();
+auctionEnd();
+"]
+	"1-0-0-0-" -> "1-0-0-0-" [label="bid();"]
+	"1-0-0-0-" -> "1-2-0-0-" [label="bid();"]
+	"1-0-0-0-" -> "1-0-3-0-" [label="bid();"]
+	"1-0-0-0-" -> "1-2-3-0-" [label="bid();"]
+	"0-0-3-0-" -> "0-0-0-4-" [label="auctionEnd();"]
+	"1-2-0-0-" -> "1-0-0-0-" [label="withdraw();"]
+	"1-2-0-0-" -> "1-2-0-0-" [label="bid();"]
+	"1-2-0-0-" -> "1-2-0-0-" [label="withdraw();"]
+	"1-2-0-0-" -> "1-0-3-0-" [label="withdraw();"]
+	"1-2-0-0-" -> "1-2-3-0-" [label="bid();"]
+	"1-2-0-0-" -> "1-2-3-0-" [label="withdraw();"]
+	"1-0-3-0-" -> "0-0-3-0-" [label="bid();"]
+	"1-0-3-0-" -> "0-0-0-4-" [label="auctionEnd();"]
+	"1-0-3-0-" -> "0-2-3-0-" [label="bid();"]
+	"0-2-3-0-" -> "0-0-3-0-" [label="withdraw();"]
+	"0-2-3-0-" -> "0-2-3-0-" [label="withdraw();"]
+	"0-2-3-0-" -> "0-2-0-4-" [label="auctionEnd();"]
+	"0-2-0-4-" -> "0-0-0-4-" [label="withdraw();"]
+	"0-2-0-4-" -> "0-2-0-4-" [label="withdraw();"]
+	"1-2-3-0-" -> "0-0-3-0-" [label="withdraw();"]
+	"1-2-3-0-" -> "0-2-3-0-" [label="bid();"]
+	"1-2-3-0-" -> "0-2-3-0-" [label="withdraw();"]
+	"1-2-3-0-" -> "0-2-0-4-" [label="auctionEnd();"]
+	init -> "0-0-3-0-" [label=constructor]
+	init -> "1-0-0-0-" [label=constructor]
+	init -> "1-0-3-0-" [label=constructor]
+}

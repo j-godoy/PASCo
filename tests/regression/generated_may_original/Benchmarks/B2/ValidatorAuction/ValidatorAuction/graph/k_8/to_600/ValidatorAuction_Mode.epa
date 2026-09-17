@@ -1,0 +1,78 @@
+// Contracts/ValidatorAuction.sol
+digraph {
+	"1-0-0-0-0-0-" [label="bid();
+"]
+	"1-0-0-0-0-0-" [label="bid();
+"]
+	"1-0-0-0-0-0-" [label="bid();
+"]
+	"0-0-3-0-0-0-" [label="depositBids();
+"]
+	"1-0-0-0-0-0-" [label="bid();
+"]
+	"0-0-0-4-0-0-" [label="closeAuction();
+"]
+	"0-0-3-0-0-0-" [label="depositBids();
+"]
+	"0-0-0-0-0-6-" [label="withdraw();
+"]
+	"0-0-0-4-0-0-" [label="closeAuction();
+"]
+	"0-0-0-0-0-0-" [label=Vacio
+]
+	"0-0-0-4-0-0-" [label="closeAuction();
+"]
+	"0-0-3-0-0-0-" [label="depositBids();
+"]
+	"0-0-0-4-0-0-" [label="closeAuction();
+"]
+	"0-0-0-0-0-6-" [label="withdraw();
+"]
+	"0-0-0-0-0-6-" [label="withdraw();
+"]
+	"0-0-0-0-0-0-" [label=Vacio
+]
+	"0-0-0-0-0-6-" [label="withdraw();
+"]
+	"0-0-0-0-0-6-" [label="withdraw();
+"]
+	"0-2-0-0-5-0-" [label="startAuction();
+addToWhitelist(addressesToWhitelist);
+"]
+	"0-0-0-0-0-0-" [label=Vacio
+]
+	"0-2-0-0-5-0-" [label="startAuction();
+addToWhitelist(addressesToWhitelist);
+"]
+	"1-0-0-0-0-0-" [label="bid();
+"]
+	"0-2-0-0-5-0-" [label="startAuction();
+addToWhitelist(addressesToWhitelist);
+"]
+	"0-0-0-4-0-0-" [label="closeAuction();
+"]
+	"0-2-0-0-5-0-" [label="startAuction();
+addToWhitelist(addressesToWhitelist);
+"]
+	"0-2-0-0-5-0-" [label="startAuction();
+addToWhitelist(addressesToWhitelist);
+"]
+	init [label=init]
+	"0-2-0-0-5-0-" [label="startAuction();
+addToWhitelist(addressesToWhitelist);
+"]
+	"1-0-0-0-0-0-" -> "1-0-0-0-0-0-" [label="bid();"]
+	"1-0-0-0-0-0-" -> "0-0-3-0-0-0-" [label="bid();"]
+	"1-0-0-0-0-0-" -> "0-0-0-4-0-0-" [label="bid();"]
+	"0-0-3-0-0-0-" -> "0-0-0-0-0-6-" [label="depositBids();"]
+	"0-0-0-4-0-0-" -> "0-0-0-0-0-0-" [label="closeAuction();"]
+	"0-0-0-4-0-0-" -> "0-0-3-0-0-0-" [label="closeAuction();"]
+	"0-0-0-4-0-0-" -> "0-0-0-0-0-6-" [label="closeAuction();"]
+	"0-0-0-0-0-6-" -> "0-0-0-0-0-0-" [label="withdraw();"]
+	"0-0-0-0-0-6-" -> "0-0-0-0-0-6-" [label="withdraw();"]
+	"0-2-0-0-5-0-" -> "0-0-0-0-0-0-" [label="startAuction();"]
+	"0-2-0-0-5-0-" -> "1-0-0-0-0-0-" [label="startAuction();"]
+	"0-2-0-0-5-0-" -> "0-0-0-4-0-0-" [label="startAuction();"]
+	"0-2-0-0-5-0-" -> "0-2-0-0-5-0-" [label="addToWhitelist(addressesToWhitelist);"]
+	init -> "0-2-0-0-5-0-" [label=constructor]
+}

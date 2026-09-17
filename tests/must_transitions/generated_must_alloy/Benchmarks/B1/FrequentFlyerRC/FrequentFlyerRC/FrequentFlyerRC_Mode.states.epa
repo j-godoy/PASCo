@@ -1,0 +1,6 @@
+digraph {
+
+S02->S02 [label="addMiles", style="", color="blue"]
+S00->S01 [label="constructor", style="", color="blue"]
+S01->S02 [label="addMiles", style="", color="blue"]
+}

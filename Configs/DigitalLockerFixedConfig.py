@@ -2,7 +2,7 @@ fileName = "DigitalLocker_fixed.sol"
 contractName = "DigitalLocker"
 functions = [
 "BeginReviewProcess();", 
-"RejectApplication(rejectionReason);",
+# "RejectApplication(rejectionReason);",
 "UploadDocuments( lockerIdentifier, image);", 
 "ShareWithThirdParty(thirdPartyRequestor, expirationDate);",
 "AcceptSharingRequest();",
@@ -15,7 +15,7 @@ functions = [
 
 statePreconditions = [
 "State == StateType.Requested", 
-"true",
+# "true",
 "State == StateType.DocumentReview",
 "State == StateType.AvailableToShare",
 "State == StateType.SharingRequestPending",
@@ -28,7 +28,7 @@ statePreconditions = [
 
 functionPreconditions = [
 "Owner != msg.sender",
-"BankAgent == msg.sender",
+# "BankAgent == msg.sender",
 "BankAgent == msg.sender",
 "Owner == msg.sender",
 "Owner == msg.sender",

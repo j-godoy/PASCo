@@ -7,6 +7,7 @@ functions = [
 "closeAuction();",
 "addToWhitelist(addressesToWhitelist);",
 "withdraw();",
+"t();",
 ]
 statePreconditions = [
 "(countWhitelist > 0 && depositLocker.initialized() && !depositLocker.deposited() && (biddersTotal < maximalNumberOfParticipants) && ((time - startTime) < (100 * 365) && time > startTime && time <= (startTime + auctionDurationInDays * 1)) && auctionState == AuctionState.Started)",
@@ -15,8 +16,10 @@ statePreconditions = [
 "((biddersTotal < maximalNumberOfParticipants) && (time > (startTime + auctionDurationInDays * 1)) && auctionState == AuctionState.Started)",
 "auctionState == AuctionState.Deployed",
 "countBidders > 0 && (auctionState == AuctionState.Ended || auctionState == AuctionState.Failed)",
+"true",
 ]
 functionPreconditions = [
+"true",
 "true",
 "true",
 "true",

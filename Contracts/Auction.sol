@@ -16,12 +16,7 @@ contract Auction {
     uint pendingReturnsCount = 0;
     uint blockNumber;
 
-    constructor(
-        uint _auctionStart,
-        uint _biddingTime,
-        address payable _beneficiary,
-        uint _blockNumber
-    ) public {
+    constructor(uint _auctionStart, uint _biddingTime, address payable _beneficiary,  uint _blockNumber) public {
         auctionStart = _auctionStart;
         biddingTime = _biddingTime;
         beneficiary = _beneficiary;
@@ -30,16 +25,15 @@ contract Auction {
 
     function Bid() public payable {
         uint end = auctionStart + biddingTime;
-        if (end < blockNumber || ended) {
+        if(end < blockNumber || ended) {
             revert();
-        } else {
-            if (msg.value <= highestBid) {
+        }
+        else {
+            if(msg.value <= highestBid) {
                 revert();
-            } else {
-                if (
-                    highestBidder != address(0x0) &&
-                    pendingReturns[highestBidder] == 0
-                ) {
+            }
+            else {
+                if (highestBidder != address(0x0) && pendingReturns[highestBidder] == 0) {
                     pendingReturnsCount += 1;
                 }
                 pendingReturns[highestBidder] += highestBid;
@@ -47,32 +41,35 @@ contract Auction {
                 highestBid = msg.value;
             }
         }
-        t();
+        // t();
     }
 
     function Withdraw() public {
-        if (pendingReturns[msg.sender] != 0 && pendingReturnsCount > 0) {
+        if(pendingReturns[msg.sender] != 0 && pendingReturnsCount > 0) {
             uint pr = pendingReturns[msg.sender];
             pendingReturns[msg.sender] = 0;
             pendingReturnsCount -= 1;
             //msg.sender.transfer(pr);
-            t();
-        } else {
+            // t();
+        }
+        else {
             revert();
         }
+        
     }
 
     function AuctionEnd() public {
         uint end = auctionStart + biddingTime;
 
         //!ended is a bug
-        if (blockNumber <= end || !ended) {
+        if(blockNumber <= end || !ended) {
             revert();
-        } else {
+        }
+        else {
             ended = true;
             //beneficiary.transfer(highestBid);
         }
-        t();
+        // t();
     }
 
     function t() public {

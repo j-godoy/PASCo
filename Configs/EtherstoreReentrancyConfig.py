@@ -13,13 +13,13 @@ functions = [
 
 statePreconditions = [
 "true",
-"(senders_in_mapping > 0)",
-"(senders_reentrant.length > 0)",
-"(senders_reentrant.length == 0)",
-"(balance > 0)",
-# "(balance == 0)",
-"(balances[A] > 0)"
-# "(balances[A] == 0)"
+"senders_in_mapping > 0",
+"senders_reentrant.length > 0",
+"senders_reentrant.length == 0",
+"balance > 0",
+# "balance == 0",
+"balances[A] > 0"
+# "balances[A] == 0"
 ]
 functionPreconditions = [
 "true",

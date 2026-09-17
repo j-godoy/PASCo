@@ -1,0 +1,94 @@
+// Contracts/CrowdfundingT.sol
+digraph {
+	"0-0-0-4-" [label="t();
+"]
+	"0-0-0-4-" [label="t();
+"]
+	"0-0-0-4-" [label="t();
+"]
+	"0-2-0-4-" [label="GetFunds();
+t();
+"]
+	"0-0-0-4-" [label="t();
+"]
+	"0-0-3-4-" [label="Claim();
+t();
+"]
+	"1-0-0-4-" [label="Donate();
+t();
+"]
+	"0-0-0-4-" [label="t();
+"]
+	"1-0-0-4-" [label="Donate();
+t();
+"]
+	"1-0-0-4-" [label="Donate();
+t();
+"]
+	"1-0-0-4-" [label="Donate();
+t();
+"]
+	"1-0-0-4-" [label="Donate();
+t();
+"]
+	"0-2-0-4-" [label="GetFunds();
+t();
+"]
+	"0-0-0-4-" [label="t();
+"]
+	"0-2-0-4-" [label="GetFunds();
+t();
+"]
+	"0-2-0-4-" [label="GetFunds();
+t();
+"]
+	"0-2-0-4-" [label="GetFunds();
+t();
+"]
+	"0-2-0-4-" [label="GetFunds();
+t();
+"]
+	"0-0-3-4-" [label="Claim();
+t();
+"]
+	"0-0-0-4-" [label="t();
+"]
+	"0-0-3-4-" [label="Claim();
+t();
+"]
+	"0-0-3-4-" [label="Claim();
+t();
+"]
+	"0-0-3-4-" [label="Claim();
+t();
+"]
+	"0-0-3-4-" [label="Claim();
+t();
+"]
+	init [label=init]
+	"0-2-0-4-" [label="GetFunds();
+t();
+"]
+	init [label=init]
+	"0-0-0-4-" [label="t();
+"]
+	init [label=init]
+	"1-0-0-4-" [label="Donate();
+t();
+"]
+	"0-0-0-4-" -> "0-0-0-4-" [label="t();"]
+	"0-0-0-4-" -> "0-2-0-4-" [label="t();"]
+	"0-0-0-4-" -> "0-0-3-4-" [label="t();"]
+	"1-0-0-4-" -> "0-0-0-4-" [label="t();"]
+	"1-0-0-4-" -> "1-0-0-4-" [label="Donate();"]
+	"1-0-0-4-" -> "1-0-0-4-" [label="t();"]
+	"0-2-0-4-" -> "0-0-0-4-" [label="GetFunds();"]
+	"0-2-0-4-" -> "0-2-0-4-" [label="GetFunds();"]
+	"0-2-0-4-" -> "0-2-0-4-" [label="t();"]
+	"0-0-3-4-" -> "0-0-0-4-" [label="Claim();"]
+	"0-0-3-4-" -> "0-0-3-4-" [label="Claim();"]
+	"0-0-3-4-" -> "0-0-3-4-" [label="t();"]
+	init -> "0-2-0-4-" [label=constructor]
+	init -> "0-0-0-4-" [label=constructor]
+	init -> "1-0-0-4-" [label=constructor]
+}

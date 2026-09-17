@@ -1,0 +1,246 @@
+// Contracts/DigitalLocker.sol
+digraph {
+	"1-2-3-4-5-6-7-8-9-10-" [label="BeginReviewProcess();
+RejectApplication(rejectionReason);
+UploadDocuments( lockerIdentifier, image);
+ShareWithThirdParty(thirdPartyRequestor, expirationDate, intendedPurpose);
+AcceptSharingRequest();
+RejectSharingRequest();
+RequestLockerAccess(intendedPurpose);
+ReleaseLockerAccess();
+RevokeAccessFromThirdParty();
+Terminate();
+"]
+	"1-2-3-4-5-6-7-8-9-10-" [label="BeginReviewProcess();
+RejectApplication(rejectionReason);
+UploadDocuments( lockerIdentifier, image);
+ShareWithThirdParty(thirdPartyRequestor, expirationDate, intendedPurpose);
+AcceptSharingRequest();
+RejectSharingRequest();
+RequestLockerAccess(intendedPurpose);
+ReleaseLockerAccess();
+RevokeAccessFromThirdParty();
+Terminate();
+"]
+	"1-2-3-4-5-6-7-8-9-10-" [label="BeginReviewProcess();
+RejectApplication(rejectionReason);
+UploadDocuments( lockerIdentifier, image);
+ShareWithThirdParty(thirdPartyRequestor, expirationDate, intendedPurpose);
+AcceptSharingRequest();
+RejectSharingRequest();
+RequestLockerAccess(intendedPurpose);
+ReleaseLockerAccess();
+RevokeAccessFromThirdParty();
+Terminate();
+"]
+	"1-2-3-4-5-6-7-8-9-10-" [label="BeginReviewProcess();
+RejectApplication(rejectionReason);
+UploadDocuments( lockerIdentifier, image);
+ShareWithThirdParty(thirdPartyRequestor, expirationDate, intendedPurpose);
+AcceptSharingRequest();
+RejectSharingRequest();
+RequestLockerAccess(intendedPurpose);
+ReleaseLockerAccess();
+RevokeAccessFromThirdParty();
+Terminate();
+"]
+	"1-2-3-4-5-6-7-8-9-10-" [label="BeginReviewProcess();
+RejectApplication(rejectionReason);
+UploadDocuments( lockerIdentifier, image);
+ShareWithThirdParty(thirdPartyRequestor, expirationDate, intendedPurpose);
+AcceptSharingRequest();
+RejectSharingRequest();
+RequestLockerAccess(intendedPurpose);
+ReleaseLockerAccess();
+RevokeAccessFromThirdParty();
+Terminate();
+"]
+	"1-2-3-4-5-6-7-8-9-10-" [label="BeginReviewProcess();
+RejectApplication(rejectionReason);
+UploadDocuments( lockerIdentifier, image);
+ShareWithThirdParty(thirdPartyRequestor, expirationDate, intendedPurpose);
+AcceptSharingRequest();
+RejectSharingRequest();
+RequestLockerAccess(intendedPurpose);
+ReleaseLockerAccess();
+RevokeAccessFromThirdParty();
+Terminate();
+"]
+	"1-2-3-4-5-6-7-8-9-10-" [label="BeginReviewProcess();
+RejectApplication(rejectionReason);
+UploadDocuments( lockerIdentifier, image);
+ShareWithThirdParty(thirdPartyRequestor, expirationDate, intendedPurpose);
+AcceptSharingRequest();
+RejectSharingRequest();
+RequestLockerAccess(intendedPurpose);
+ReleaseLockerAccess();
+RevokeAccessFromThirdParty();
+Terminate();
+"]
+	"1-2-3-4-5-6-7-8-9-10-" [label="BeginReviewProcess();
+RejectApplication(rejectionReason);
+UploadDocuments( lockerIdentifier, image);
+ShareWithThirdParty(thirdPartyRequestor, expirationDate, intendedPurpose);
+AcceptSharingRequest();
+RejectSharingRequest();
+RequestLockerAccess(intendedPurpose);
+ReleaseLockerAccess();
+RevokeAccessFromThirdParty();
+Terminate();
+"]
+	"1-2-3-4-5-6-7-8-9-10-" [label="BeginReviewProcess();
+RejectApplication(rejectionReason);
+UploadDocuments( lockerIdentifier, image);
+ShareWithThirdParty(thirdPartyRequestor, expirationDate, intendedPurpose);
+AcceptSharingRequest();
+RejectSharingRequest();
+RequestLockerAccess(intendedPurpose);
+ReleaseLockerAccess();
+RevokeAccessFromThirdParty();
+Terminate();
+"]
+	"1-2-3-4-5-6-7-8-9-10-" [label="BeginReviewProcess();
+RejectApplication(rejectionReason);
+UploadDocuments( lockerIdentifier, image);
+ShareWithThirdParty(thirdPartyRequestor, expirationDate, intendedPurpose);
+AcceptSharingRequest();
+RejectSharingRequest();
+RequestLockerAccess(intendedPurpose);
+ReleaseLockerAccess();
+RevokeAccessFromThirdParty();
+Terminate();
+"]
+	"1-2-3-4-5-6-7-8-9-10-" [label="BeginReviewProcess();
+RejectApplication(rejectionReason);
+UploadDocuments( lockerIdentifier, image);
+ShareWithThirdParty(thirdPartyRequestor, expirationDate, intendedPurpose);
+AcceptSharingRequest();
+RejectSharingRequest();
+RequestLockerAccess(intendedPurpose);
+ReleaseLockerAccess();
+RevokeAccessFromThirdParty();
+Terminate();
+"]
+	"1-2-3-4-5-6-7-8-9-10-" [label="BeginReviewProcess();
+RejectApplication(rejectionReason);
+UploadDocuments( lockerIdentifier, image);
+ShareWithThirdParty(thirdPartyRequestor, expirationDate, intendedPurpose);
+AcceptSharingRequest();
+RejectSharingRequest();
+RequestLockerAccess(intendedPurpose);
+ReleaseLockerAccess();
+RevokeAccessFromThirdParty();
+Terminate();
+"]
+	"1-2-3-4-5-6-7-8-9-10-" [label="BeginReviewProcess();
+RejectApplication(rejectionReason);
+UploadDocuments( lockerIdentifier, image);
+ShareWithThirdParty(thirdPartyRequestor, expirationDate, intendedPurpose);
+AcceptSharingRequest();
+RejectSharingRequest();
+RequestLockerAccess(intendedPurpose);
+ReleaseLockerAccess();
+RevokeAccessFromThirdParty();
+Terminate();
+"]
+	"1-2-3-4-5-6-7-8-9-10-" [label="BeginReviewProcess();
+RejectApplication(rejectionReason);
+UploadDocuments( lockerIdentifier, image);
+ShareWithThirdParty(thirdPartyRequestor, expirationDate, intendedPurpose);
+AcceptSharingRequest();
+RejectSharingRequest();
+RequestLockerAccess(intendedPurpose);
+ReleaseLockerAccess();
+RevokeAccessFromThirdParty();
+Terminate();
+"]
+	"1-2-3-4-5-6-7-8-9-10-" [label="BeginReviewProcess();
+RejectApplication(rejectionReason);
+UploadDocuments( lockerIdentifier, image);
+ShareWithThirdParty(thirdPartyRequestor, expirationDate, intendedPurpose);
+AcceptSharingRequest();
+RejectSharingRequest();
+RequestLockerAccess(intendedPurpose);
+ReleaseLockerAccess();
+RevokeAccessFromThirdParty();
+Terminate();
+"]
+	"1-2-3-4-5-6-7-8-9-10-" [label="BeginReviewProcess();
+RejectApplication(rejectionReason);
+UploadDocuments( lockerIdentifier, image);
+ShareWithThirdParty(thirdPartyRequestor, expirationDate, intendedPurpose);
+AcceptSharingRequest();
+RejectSharingRequest();
+RequestLockerAccess(intendedPurpose);
+ReleaseLockerAccess();
+RevokeAccessFromThirdParty();
+Terminate();
+"]
+	"1-2-3-4-5-6-7-8-9-10-" [label="BeginReviewProcess();
+RejectApplication(rejectionReason);
+UploadDocuments( lockerIdentifier, image);
+ShareWithThirdParty(thirdPartyRequestor, expirationDate, intendedPurpose);
+AcceptSharingRequest();
+RejectSharingRequest();
+RequestLockerAccess(intendedPurpose);
+ReleaseLockerAccess();
+RevokeAccessFromThirdParty();
+Terminate();
+"]
+	"1-2-3-4-5-6-7-8-9-10-" [label="BeginReviewProcess();
+RejectApplication(rejectionReason);
+UploadDocuments( lockerIdentifier, image);
+ShareWithThirdParty(thirdPartyRequestor, expirationDate, intendedPurpose);
+AcceptSharingRequest();
+RejectSharingRequest();
+RequestLockerAccess(intendedPurpose);
+ReleaseLockerAccess();
+RevokeAccessFromThirdParty();
+Terminate();
+"]
+	"1-2-3-4-5-6-7-8-9-10-" [label="BeginReviewProcess();
+RejectApplication(rejectionReason);
+UploadDocuments( lockerIdentifier, image);
+ShareWithThirdParty(thirdPartyRequestor, expirationDate, intendedPurpose);
+AcceptSharingRequest();
+RejectSharingRequest();
+RequestLockerAccess(intendedPurpose);
+ReleaseLockerAccess();
+RevokeAccessFromThirdParty();
+Terminate();
+"]
+	"1-2-3-4-5-6-7-8-9-10-" [label="BeginReviewProcess();
+RejectApplication(rejectionReason);
+UploadDocuments( lockerIdentifier, image);
+ShareWithThirdParty(thirdPartyRequestor, expirationDate, intendedPurpose);
+AcceptSharingRequest();
+RejectSharingRequest();
+RequestLockerAccess(intendedPurpose);
+ReleaseLockerAccess();
+RevokeAccessFromThirdParty();
+Terminate();
+"]
+	init [label=init]
+	"1-2-3-4-5-6-7-8-9-10-" [label="BeginReviewProcess();
+RejectApplication(rejectionReason);
+UploadDocuments( lockerIdentifier, image);
+ShareWithThirdParty(thirdPartyRequestor, expirationDate, intendedPurpose);
+AcceptSharingRequest();
+RejectSharingRequest();
+RequestLockerAccess(intendedPurpose);
+ReleaseLockerAccess();
+RevokeAccessFromThirdParty();
+Terminate();
+"]
+	"1-2-3-4-5-6-7-8-9-10-" -> "1-2-3-4-5-6-7-8-9-10-" [label="BeginReviewProcess();"]
+	"1-2-3-4-5-6-7-8-9-10-" -> "1-2-3-4-5-6-7-8-9-10-" [label="RejectApplication(rejectionReason);"]
+	"1-2-3-4-5-6-7-8-9-10-" -> "1-2-3-4-5-6-7-8-9-10-" [label="UploadDocuments( lockerIdentifier, image);"]
+	"1-2-3-4-5-6-7-8-9-10-" -> "1-2-3-4-5-6-7-8-9-10-" [label="ShareWithThirdParty(thirdPartyRequestor, expirationDate, intendedPurpose);"]
+	"1-2-3-4-5-6-7-8-9-10-" -> "1-2-3-4-5-6-7-8-9-10-" [label="AcceptSharingRequest();"]
+	"1-2-3-4-5-6-7-8-9-10-" -> "1-2-3-4-5-6-7-8-9-10-" [label="RejectSharingRequest();"]
+	"1-2-3-4-5-6-7-8-9-10-" -> "1-2-3-4-5-6-7-8-9-10-" [label="RequestLockerAccess(intendedPurpose);"]
+	"1-2-3-4-5-6-7-8-9-10-" -> "1-2-3-4-5-6-7-8-9-10-" [label="ReleaseLockerAccess();"]
+	"1-2-3-4-5-6-7-8-9-10-" -> "1-2-3-4-5-6-7-8-9-10-" [label="RevokeAccessFromThirdParty();"]
+	"1-2-3-4-5-6-7-8-9-10-" -> "1-2-3-4-5-6-7-8-9-10-" [label="Terminate();"]
+	init -> "1-2-3-4-5-6-7-8-9-10-" [label=constructor]
+}

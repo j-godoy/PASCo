@@ -1,0 +1,120 @@
+// Contracts/Auction_imdea_bepa_constructor.sol
+digraph {
+	"1-0-0-0-0-" [label="constructor_f(_auctionStart,_biddingTime,_beneficiary);
+"]
+	"0-2-0-0-5-" [label="Bid();
+t();
+"]
+	"1-0-0-0-0-" [label="constructor_f(_auctionStart,_biddingTime,_beneficiary);
+"]
+	"0-0-0-4-5-" [label="AuctionEnd();
+t();
+"]
+	"0-0-0-0-5-" [label="t();
+"]
+	"0-0-0-0-5-" [label="t();
+"]
+	"0-2-0-0-5-" [label="Bid();
+t();
+"]
+	"0-2-0-0-5-" [label="Bid();
+t();
+"]
+	"0-2-0-0-5-" [label="Bid();
+t();
+"]
+	"0-2-0-0-5-" [label="Bid();
+t();
+"]
+	"0-2-0-0-5-" [label="Bid();
+t();
+"]
+	"0-0-0-4-5-" [label="AuctionEnd();
+t();
+"]
+	"0-2-0-0-5-" [label="Bid();
+t();
+"]
+	"0-0-3-4-5-" [label="Withdraw();
+AuctionEnd();
+t();
+"]
+	"0-0-3-0-5-" [label="Withdraw();
+t();
+"]
+	"0-0-0-0-5-" [label="t();
+"]
+	"0-0-3-0-5-" [label="Withdraw();
+t();
+"]
+	"0-0-3-0-5-" [label="Withdraw();
+t();
+"]
+	"0-0-3-0-5-" [label="Withdraw();
+t();
+"]
+	"0-0-3-0-5-" [label="Withdraw();
+t();
+"]
+	"0-0-0-4-5-" [label="AuctionEnd();
+t();
+"]
+	"0-0-0-0-5-" [label="t();
+"]
+	"0-0-0-4-5-" [label="AuctionEnd();
+t();
+"]
+	"0-0-0-4-5-" [label="AuctionEnd();
+t();
+"]
+	"0-0-3-4-5-" [label="Withdraw();
+AuctionEnd();
+t();
+"]
+	"0-0-3-0-5-" [label="Withdraw();
+t();
+"]
+	"0-0-3-4-5-" [label="Withdraw();
+AuctionEnd();
+t();
+"]
+	"0-0-0-4-5-" [label="AuctionEnd();
+t();
+"]
+	"0-0-3-4-5-" [label="Withdraw();
+AuctionEnd();
+t();
+"]
+	"0-0-3-4-5-" [label="Withdraw();
+AuctionEnd();
+t();
+"]
+	"0-0-3-4-5-" [label="Withdraw();
+AuctionEnd();
+t();
+"]
+	"0-0-3-4-5-" [label="Withdraw();
+AuctionEnd();
+t();
+"]
+	init [label=init]
+	"1-0-0-0-0-" [label="constructor_f(_auctionStart,_biddingTime,_beneficiary);
+"]
+	"1-0-0-0-0-" -> "0-2-0-0-5-" [label="constructor_f(_auctionStart,_biddingTime,_beneficiary);"]
+	"1-0-0-0-0-" -> "0-0-0-4-5-" [label="constructor_f(_auctionStart,_biddingTime,_beneficiary);"]
+	"0-0-0-0-5-" -> "0-0-0-0-5-" [label="t();"]
+	"0-2-0-0-5-" -> "0-2-0-0-5-" [label="Bid();"]
+	"0-2-0-0-5-" -> "0-2-0-0-5-" [label="t();"]
+	"0-2-0-0-5-" -> "0-0-0-4-5-" [label="t();"]
+	"0-2-0-0-5-" -> "0-0-3-4-5-" [label="t();"]
+	"0-0-3-0-5-" -> "0-0-0-0-5-" [label="Withdraw();"]
+	"0-0-3-0-5-" -> "0-0-3-0-5-" [label="Withdraw();"]
+	"0-0-3-0-5-" -> "0-0-3-0-5-" [label="t();"]
+	"0-0-0-4-5-" -> "0-0-0-0-5-" [label="AuctionEnd();"]
+	"0-0-0-4-5-" -> "0-0-0-4-5-" [label="t();"]
+	"0-0-3-4-5-" -> "0-0-3-0-5-" [label="AuctionEnd();"]
+	"0-0-3-4-5-" -> "0-0-0-4-5-" [label="Withdraw();"]
+	"0-0-3-4-5-" -> "0-0-3-4-5-" [label="Withdraw();"]
+	"0-0-3-4-5-" -> "0-0-3-4-5-" [label="t();"]
+	init -> "1-0-0-0-0-" [label=constructor]
+}

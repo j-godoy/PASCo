@@ -1,0 +1,7 @@
+digraph {
+
+S01->S01 [label="getDefectiveComponentsCount", style="", color="blue"]
+S02->S02 [label="getDefectiveComponentsCount", style="", color="blue"]
+S00->S01 [label="constructor", style="", color="blue"]
+S01->S02 [label="computeTotal", style="", color="blue"]
+}

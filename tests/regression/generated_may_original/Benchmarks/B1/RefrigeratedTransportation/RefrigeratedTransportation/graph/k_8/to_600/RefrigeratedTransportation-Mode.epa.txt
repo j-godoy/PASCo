@@ -1,0 +1,5 @@
+Subject: RefrigeratedTransportation-Mode.epa
+Total time: 8.907508373260498
+# Time Out: 0
+# Corral Fail without trackvars: 0
+# Corral Fail with trackvars: 0

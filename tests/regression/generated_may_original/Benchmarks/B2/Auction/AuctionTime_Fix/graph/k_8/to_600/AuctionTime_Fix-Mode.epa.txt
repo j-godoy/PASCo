@@ -1,0 +1,5 @@
+Subject: AuctionTime_Fix-Mode.epa
+Total time: 31.566912174224854
+# Time Out: 0
+# Corral Fail without trackvars: 0
+# Corral Fail with trackvars: 0

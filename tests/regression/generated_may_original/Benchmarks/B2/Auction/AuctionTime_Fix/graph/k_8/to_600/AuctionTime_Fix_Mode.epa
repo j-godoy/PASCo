@@ -1,0 +1,160 @@
+// Contracts/Auction.sol
+digraph {
+	"1-0-0-4-" [label="Bid();
+t();
+"]
+	"1-0-0-4-" [label="Bid();
+t();
+"]
+	"1-0-0-4-" [label="Bid();
+t();
+"]
+	"1-0-0-4-" [label="Bid();
+t();
+"]
+	"1-0-0-4-" [label="Bid();
+t();
+"]
+	"0-0-3-4-" [label="AuctionEnd();
+t();
+"]
+	"1-0-0-4-" [label="Bid();
+t();
+"]
+	"0-0-3-4-" [label="AuctionEnd();
+t();
+"]
+	"1-0-0-4-" [label="Bid();
+t();
+"]
+	"1-2-0-4-" [label="Bid();
+Withdraw();
+t();
+"]
+	"1-0-0-4-" [label="Bid();
+t();
+"]
+	"0-2-3-4-" [label="Withdraw();
+AuctionEnd();
+t();
+"]
+	"0-0-3-4-" [label="AuctionEnd();
+t();
+"]
+	"0-0-3-4-" [label="AuctionEnd();
+t();
+"]
+	"1-2-0-4-" [label="Bid();
+Withdraw();
+t();
+"]
+	"1-0-0-4-" [label="Bid();
+t();
+"]
+	"1-2-0-4-" [label="Bid();
+Withdraw();
+t();
+"]
+	"0-0-3-4-" [label="AuctionEnd();
+t();
+"]
+	"1-2-0-4-" [label="Bid();
+Withdraw();
+t();
+"]
+	"1-2-0-4-" [label="Bid();
+Withdraw();
+t();
+"]
+	"1-2-0-4-" [label="Bid();
+Withdraw();
+t();
+"]
+	"1-2-0-4-" [label="Bid();
+Withdraw();
+t();
+"]
+	"1-2-0-4-" [label="Bid();
+Withdraw();
+t();
+"]
+	"1-2-0-4-" [label="Bid();
+Withdraw();
+t();
+"]
+	"1-2-0-4-" [label="Bid();
+Withdraw();
+t();
+"]
+	"0-2-3-4-" [label="Withdraw();
+AuctionEnd();
+t();
+"]
+	"1-2-0-4-" [label="Bid();
+Withdraw();
+t();
+"]
+	"0-2-3-4-" [label="Withdraw();
+AuctionEnd();
+t();
+"]
+	"1-2-0-4-" [label="Bid();
+Withdraw();
+t();
+"]
+	"0-2-3-4-" [label="Withdraw();
+AuctionEnd();
+t();
+"]
+	"0-2-3-4-" [label="Withdraw();
+AuctionEnd();
+t();
+"]
+	"0-0-3-4-" [label="AuctionEnd();
+t();
+"]
+	"0-2-3-4-" [label="Withdraw();
+AuctionEnd();
+t();
+"]
+	"0-2-3-4-" [label="Withdraw();
+AuctionEnd();
+t();
+"]
+	"0-2-3-4-" [label="Withdraw();
+AuctionEnd();
+t();
+"]
+	"0-2-3-4-" [label="Withdraw();
+AuctionEnd();
+t();
+"]
+	init [label=init]
+	"1-0-0-4-" [label="Bid();
+t();
+"]
+	init [label=init]
+	"0-0-3-4-" [label="AuctionEnd();
+t();
+"]
+	"1-0-0-4-" -> "1-0-0-4-" [label="Bid();"]
+	"1-0-0-4-" -> "1-0-0-4-" [label="t();"]
+	"1-0-0-4-" -> "0-0-3-4-" [label="Bid();"]
+	"1-0-0-4-" -> "0-0-3-4-" [label="t();"]
+	"1-0-0-4-" -> "1-2-0-4-" [label="Bid();"]
+	"1-0-0-4-" -> "0-2-3-4-" [label="Bid();"]
+	"0-0-3-4-" -> "0-0-3-4-" [label="t();"]
+	"1-2-0-4-" -> "1-0-0-4-" [label="Withdraw();"]
+	"1-2-0-4-" -> "0-0-3-4-" [label="Withdraw();"]
+	"1-2-0-4-" -> "1-2-0-4-" [label="Bid();"]
+	"1-2-0-4-" -> "1-2-0-4-" [label="Withdraw();"]
+	"1-2-0-4-" -> "1-2-0-4-" [label="t();"]
+	"1-2-0-4-" -> "0-2-3-4-" [label="Bid();"]
+	"1-2-0-4-" -> "0-2-3-4-" [label="Withdraw();"]
+	"1-2-0-4-" -> "0-2-3-4-" [label="t();"]
+	"0-2-3-4-" -> "0-0-3-4-" [label="Withdraw();"]
+	"0-2-3-4-" -> "0-2-3-4-" [label="Withdraw();"]
+	"0-2-3-4-" -> "0-2-3-4-" [label="t();"]
+	init -> "1-0-0-4-" [label=constructor]
+	init -> "0-0-3-4-" [label=constructor]
+}

@@ -1,0 +1,202 @@
+// Contracts/AuctionTime_Fix_Bid_Withdraw.sol
+digraph {
+	"0-0-0-0-0-6-" [label="t();
+"]
+	"0-0-0-0-0-6-" [label="t();
+"]
+	"0-0-0-0-5-6-" [label="AuctionEnd();
+t();
+"]
+	"0-0-0-0-0-6-" [label="t();
+"]
+	"0-0-0-0-5-6-" [label="AuctionEnd();
+t();
+"]
+	"0-0-0-0-5-6-" [label="AuctionEnd();
+t();
+"]
+	"1-2-0-0-0-6-" [label="BidA();
+BidNotA();
+t();
+"]
+	"0-0-0-0-5-6-" [label="AuctionEnd();
+t();
+"]
+	"1-2-0-0-0-6-" [label="BidA();
+BidNotA();
+t();
+"]
+	"1-2-0-0-0-6-" [label="BidA();
+BidNotA();
+t();
+"]
+	"1-2-0-0-0-6-" [label="BidA();
+BidNotA();
+t();
+"]
+	"1-2-0-0-0-6-" [label="BidA();
+BidNotA();
+t();
+"]
+	"1-2-0-0-0-6-" [label="BidA();
+BidNotA();
+t();
+"]
+	"1-2-0-0-0-6-" [label="BidA();
+BidNotA();
+t();
+"]
+	"1-2-0-0-0-6-" [label="BidA();
+BidNotA();
+t();
+"]
+	"0-0-3-0-5-6-" [label="WithdrawA();
+AuctionEnd();
+t();
+"]
+	"1-2-0-0-0-6-" [label="BidA();
+BidNotA();
+t();
+"]
+	"0-0-0-4-5-6-" [label="WithdrawNotA();
+AuctionEnd();
+t();
+"]
+	"1-2-0-0-0-6-" [label="BidA();
+BidNotA();
+t();
+"]
+	"0-0-3-4-5-6-" [label="WithdrawA();
+WithdrawNotA();
+AuctionEnd();
+t();
+"]
+	"0-0-3-0-5-6-" [label="WithdrawA();
+AuctionEnd();
+t();
+"]
+	"0-0-0-0-0-6-" [label="t();
+"]
+	"0-0-3-0-5-6-" [label="WithdrawA();
+AuctionEnd();
+t();
+"]
+	"0-0-0-0-5-6-" [label="AuctionEnd();
+t();
+"]
+	"0-0-3-0-5-6-" [label="WithdrawA();
+AuctionEnd();
+t();
+"]
+	"0-0-3-0-5-6-" [label="WithdrawA();
+AuctionEnd();
+t();
+"]
+	"0-0-0-4-5-6-" [label="WithdrawNotA();
+AuctionEnd();
+t();
+"]
+	"0-0-0-0-0-6-" [label="t();
+"]
+	"0-0-0-4-5-6-" [label="WithdrawNotA();
+AuctionEnd();
+t();
+"]
+	"0-0-0-0-5-6-" [label="AuctionEnd();
+t();
+"]
+	"0-0-0-4-5-6-" [label="WithdrawNotA();
+AuctionEnd();
+t();
+"]
+	"0-0-0-4-5-6-" [label="WithdrawNotA();
+AuctionEnd();
+t();
+"]
+	"0-0-0-4-5-6-" [label="WithdrawNotA();
+AuctionEnd();
+t();
+"]
+	"0-0-0-4-5-6-" [label="WithdrawNotA();
+AuctionEnd();
+t();
+"]
+	"0-0-3-4-5-6-" [label="WithdrawA();
+WithdrawNotA();
+AuctionEnd();
+t();
+"]
+	"0-0-0-0-0-6-" [label="t();
+"]
+	"0-0-3-4-5-6-" [label="WithdrawA();
+WithdrawNotA();
+AuctionEnd();
+t();
+"]
+	"0-0-3-0-5-6-" [label="WithdrawA();
+AuctionEnd();
+t();
+"]
+	"0-0-3-4-5-6-" [label="WithdrawA();
+WithdrawNotA();
+AuctionEnd();
+t();
+"]
+	"0-0-0-4-5-6-" [label="WithdrawNotA();
+AuctionEnd();
+t();
+"]
+	"0-0-3-4-5-6-" [label="WithdrawA();
+WithdrawNotA();
+AuctionEnd();
+t();
+"]
+	"0-0-3-4-5-6-" [label="WithdrawA();
+WithdrawNotA();
+AuctionEnd();
+t();
+"]
+	"0-0-3-4-5-6-" [label="WithdrawA();
+WithdrawNotA();
+AuctionEnd();
+t();
+"]
+	"0-0-3-4-5-6-" [label="WithdrawA();
+WithdrawNotA();
+AuctionEnd();
+t();
+"]
+	init [label=init]
+	"1-2-0-0-0-6-" [label="BidA();
+BidNotA();
+t();
+"]
+	init [label=init]
+	"0-0-0-0-5-6-" [label="AuctionEnd();
+t();
+"]
+	"0-0-0-0-0-6-" -> "0-0-0-0-0-6-" [label="t();"]
+	"0-0-0-0-5-6-" -> "0-0-0-0-0-6-" [label="AuctionEnd();"]
+	"0-0-0-0-5-6-" -> "0-0-0-0-5-6-" [label="t();"]
+	"1-2-0-0-0-6-" -> "0-0-0-0-5-6-" [label="t();"]
+	"1-2-0-0-0-6-" -> "1-2-0-0-0-6-" [label="BidA();"]
+	"1-2-0-0-0-6-" -> "1-2-0-0-0-6-" [label="BidNotA();"]
+	"1-2-0-0-0-6-" -> "1-2-0-0-0-6-" [label="t();"]
+	"1-2-0-0-0-6-" -> "0-0-3-0-5-6-" [label="t();"]
+	"1-2-0-0-0-6-" -> "0-0-0-4-5-6-" [label="t();"]
+	"1-2-0-0-0-6-" -> "0-0-3-4-5-6-" [label="t();"]
+	"0-0-3-0-5-6-" -> "0-0-0-0-0-6-" [label="AuctionEnd();"]
+	"0-0-3-0-5-6-" -> "0-0-0-0-5-6-" [label="WithdrawA();"]
+	"0-0-3-0-5-6-" -> "0-0-3-0-5-6-" [label="t();"]
+	"0-0-0-4-5-6-" -> "0-0-0-0-0-6-" [label="AuctionEnd();"]
+	"0-0-0-4-5-6-" -> "0-0-0-0-5-6-" [label="WithdrawNotA();"]
+	"0-0-0-4-5-6-" -> "0-0-0-4-5-6-" [label="WithdrawNotA();"]
+	"0-0-0-4-5-6-" -> "0-0-0-4-5-6-" [label="t();"]
+	"0-0-3-4-5-6-" -> "0-0-0-0-0-6-" [label="AuctionEnd();"]
+	"0-0-3-4-5-6-" -> "0-0-3-0-5-6-" [label="WithdrawNotA();"]
+	"0-0-3-4-5-6-" -> "0-0-0-4-5-6-" [label="WithdrawA();"]
+	"0-0-3-4-5-6-" -> "0-0-3-4-5-6-" [label="WithdrawNotA();"]
+	"0-0-3-4-5-6-" -> "0-0-3-4-5-6-" [label="t();"]
+	init -> "1-2-0-0-0-6-" [label=constructor]
+	init -> "0-0-0-0-5-6-" [label=constructor]
+}

@@ -1,0 +1,12 @@
+digraph {
+
+S01->S01 [label="deposit\nt\ntransferOwnership", style="", color="blue"]
+S02->S02 [label="refund\nt\ntransferOwnership", style="", color="blue"]
+S03->S03 [label="deposit\nt\ntransferOwnership\nwithdrawAll", style="", color="blue"]
+S01->S03 [label="setGoalReached", style="", color="blue"]
+S04->S04 [label="t\ntransferOwnership", style="", color="blue"]
+S00->S01 [label="constructor", style="", color="blue"]
+S01->S02 [label="enableRefunds", style="", color="blue"]
+S03->S04 [label="close", style="", color="blue"]
+S03->S03 [label="withdraw", style="", color="black"]
+}

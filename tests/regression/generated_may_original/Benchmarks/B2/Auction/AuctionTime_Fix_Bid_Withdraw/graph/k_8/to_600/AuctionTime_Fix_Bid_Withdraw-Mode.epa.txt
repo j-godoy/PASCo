@@ -1,0 +1,5 @@
+Subject: AuctionTime_Fix_Bid_Withdraw-Mode.epa
+Total time: 85.14671206474304
+# Time Out: 0
+# Corral Fail without trackvars: 0
+# Corral Fail with trackvars: 0

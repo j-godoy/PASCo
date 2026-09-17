@@ -1,0 +1,12 @@
+// Contracts/CounterExampleFiltering.sol
+digraph {
+	"1-" [label="f();
+"]
+	"1-" [label="f();
+"]
+	init [label=init]
+	"1-" [label="f();
+"]
+	init -> "1-" [label=constructor color=blue]
+	"1-" -> "1-" [label="f();" style=solid]
+}

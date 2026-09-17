@@ -1,0 +1,15 @@
+// Contracts/SimpleMarketplace_fixed.sol
+digraph {
+	"1-0-0-" [label=ItemAvailable]
+	"0-2-0-" [label=OfferPlaced]
+	"0-2-0-" [label=OfferPlaced]
+	"1-0-0-" [label=ItemAvailable]
+	"0-2-0-" [label=OfferPlaced]
+	"0-0-3-" [label=Accepted]
+	init [label=init]
+	"1-0-0-" [label=ItemAvailable]
+	init -> "1-0-0-" [label=constructor color=blue]
+	"0-2-0-" -> "1-0-0-" [label="Reject();" color=blue style=solid]
+	"0-2-0-" -> "0-0-3-" [label="AcceptOffer();" color=blue style=solid]
+	"1-0-0-" -> "0-2-0-" [label="MakeOffer(offerPrice);" color=blue style=solid]
+}

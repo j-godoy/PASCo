@@ -1,0 +1,180 @@
+// Contracts/CrowdfundingT_BaseBalanceFix.sol
+digraph {
+	"0-0-0-0-5-" [label="t();
+"]
+	"0-0-0-0-5-" [label="t();
+"]
+	"1-0-0-0-5-" [label="Donate();
+t();
+"]
+	"0-0-0-0-5-" [label="t();
+"]
+	"1-0-0-0-5-" [label="Donate();
+t();
+"]
+	"1-0-0-0-5-" [label="Donate();
+t();
+"]
+	"1-0-0-0-5-" [label="Donate();
+t();
+"]
+	"1-0-0-0-5-" [label="Donate();
+t();
+"]
+	"1-0-0-0-5-" [label="Donate();
+t();
+"]
+	"0-2-0-0-5-" [label="GetFunds();
+t();
+"]
+	"1-0-0-0-5-" [label="Donate();
+t();
+"]
+	"1-0-0-4-5-" [label="Donate();
+dummy_balanceGTZero();
+t();
+"]
+	"0-2-0-0-5-" [label="GetFunds();
+t();
+"]
+	"0-2-0-0-5-" [label="GetFunds();
+t();
+"]
+	"0-2-0-0-5-" [label="GetFunds();
+t();
+"]
+	"0-2-0-0-5-" [label="GetFunds();
+t();
+"]
+	"1-0-0-4-5-" [label="Donate();
+dummy_balanceGTZero();
+t();
+"]
+	"1-0-0-4-5-" [label="Donate();
+dummy_balanceGTZero();
+t();
+"]
+	"1-0-0-4-5-" [label="Donate();
+dummy_balanceGTZero();
+t();
+"]
+	"1-0-0-4-5-" [label="Donate();
+dummy_balanceGTZero();
+t();
+"]
+	"1-0-0-4-5-" [label="Donate();
+dummy_balanceGTZero();
+t();
+"]
+	"1-0-0-4-5-" [label="Donate();
+dummy_balanceGTZero();
+t();
+"]
+	"1-0-0-4-5-" [label="Donate();
+dummy_balanceGTZero();
+t();
+"]
+	"0-2-0-4-5-" [label="GetFunds();
+dummy_balanceGTZero();
+t();
+"]
+	"1-0-0-4-5-" [label="Donate();
+dummy_balanceGTZero();
+t();
+"]
+	"0-0-3-4-5-" [label="Claim();
+dummy_balanceGTZero();
+t();
+"]
+	"0-2-0-4-5-" [label="GetFunds();
+dummy_balanceGTZero();
+t();
+"]
+	"0-0-0-0-5-" [label="t();
+"]
+	"0-2-0-4-5-" [label="GetFunds();
+dummy_balanceGTZero();
+t();
+"]
+	"0-2-0-0-5-" [label="GetFunds();
+t();
+"]
+	"0-2-0-4-5-" [label="GetFunds();
+dummy_balanceGTZero();
+t();
+"]
+	"0-2-0-4-5-" [label="GetFunds();
+dummy_balanceGTZero();
+t();
+"]
+	"0-2-0-4-5-" [label="GetFunds();
+dummy_balanceGTZero();
+t();
+"]
+	"0-2-0-4-5-" [label="GetFunds();
+dummy_balanceGTZero();
+t();
+"]
+	"0-0-3-4-5-" [label="Claim();
+dummy_balanceGTZero();
+t();
+"]
+	"0-0-0-0-5-" [label="t();
+"]
+	"0-0-3-4-5-" [label="Claim();
+dummy_balanceGTZero();
+t();
+"]
+	"0-0-3-4-5-" [label="Claim();
+dummy_balanceGTZero();
+t();
+"]
+	"0-0-3-4-5-" [label="Claim();
+dummy_balanceGTZero();
+t();
+"]
+	"0-0-3-4-5-" [label="Claim();
+dummy_balanceGTZero();
+t();
+"]
+	"0-0-3-4-5-" [label="Claim();
+dummy_balanceGTZero();
+t();
+"]
+	"0-0-3-4-5-" [label="Claim();
+dummy_balanceGTZero();
+t();
+"]
+	init [label=init]
+	"1-0-0-0-5-" [label="Donate();
+t();
+"]
+	init [label=init]
+	"0-2-0-0-5-" [label="GetFunds();
+t();
+"]
+	init [label=init]
+	"0-0-0-0-5-" [label="t();
+"]
+	init -> "1-0-0-0-5-" [label=constructor color=blue]
+	init -> "0-2-0-0-5-" [label=constructor color=blue]
+	init -> "0-0-0-0-5-" [label=constructor color=blue]
+	"0-0-0-0-5-" -> "0-0-0-0-5-" [label="t();" color=blue style=dashed]
+	"1-0-0-0-5-" -> "0-0-0-0-5-" [label="t();" color=turquoise style=dashed]
+	"1-0-0-0-5-" -> "1-0-0-0-5-" [label="t();" color=turquoise style=dashed]
+	"1-0-0-0-5-" -> "0-2-0-0-5-" [label="t();" color=turquoise style=dashed]
+	"0-2-0-0-5-" -> "0-2-0-0-5-" [label="t();" color=blue style=dashed]
+	"1-0-0-4-5-" -> "1-0-0-4-5-" [label="t();" color=turquoise style=dashed]
+	"1-0-0-4-5-" -> "0-2-0-4-5-" [label="t();" color=turquoise style=dashed]
+	"1-0-0-4-5-" -> "0-0-3-4-5-" [label="t();" color=turquoise style=dashed]
+	"0-2-0-4-5-" -> "0-2-0-4-5-" [label="t();" color=blue style=dashed]
+	"0-0-3-4-5-" -> "0-0-3-4-5-" [label="t();" color=blue style=dashed]
+	"0-2-0-0-5-" -> "0-2-0-0-5-" [label="GetFunds();" color=blue style=solid]
+	"1-0-0-4-5-" -> "1-0-0-4-5-" [label="Donate();" color=blue style=solid]
+	"1-0-0-0-5-" -> "1-0-0-0-5-" [label="Donate();" color=turquoise style=solid]
+	"1-0-0-0-5-" -> "1-0-0-4-5-" [label="Donate();" color=turquoise style=solid]
+	"0-2-0-4-5-" -> "0-2-0-0-5-" [label="GetFunds();" color=turquoise style=solid]
+	"0-2-0-4-5-" -> "0-0-0-0-5-" [label="GetFunds();" color=turquoise style=solid]
+	"0-0-3-4-5-" -> "0-0-3-4-5-" [label="Claim();" color=turquoise style=solid]
+	"0-0-3-4-5-" -> "0-0-0-0-5-" [label="Claim();" color=turquoise style=solid]
+}

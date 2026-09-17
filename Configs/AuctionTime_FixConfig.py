@@ -1,4 +1,4 @@
-fileName = "Auction.sol"
+fileName = "AuctionTime_Fix.sol"
 contractName = "Auction"
 functions = [
 "Bid();",
